@@ -10,6 +10,7 @@ import { MainLayout } from './layout/MainLayout';
 // Pages
 import { Landing } from './pages/Landing';
 import { Courses } from './pages/Courses';
+import { SubscriptionDetails } from './pages/SubscriptionDetails';
 import { Coaches } from './pages/Coaches';
 import { Students } from './pages/Students';
 import { StudentDashboard } from './pages/StudentDashboard';
@@ -91,6 +92,7 @@ function App() {
                   } />
 
                   <Route path="courses" element={<Courses />} />
+                  <Route path="courses/:planId" element={<SubscriptionDetails />} />
                   <Route path="coaches" element={<Coaches />} />
                   <Route path="cart" element={<CartPage />} />
                   <Route path="checkout" element={<Checkout />} />
