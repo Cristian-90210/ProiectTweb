@@ -231,7 +231,7 @@ const UserAvatarDropdown: React.FC = () => {
                 </span>
             </DropdownButton>
 
-            <DropdownMenu anchor="right">
+            <DropdownMenu anchor="right" className="translate-x-2">
                 {/* Header */}
                 <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700/60">
                     <p className="text-sm font-bold text-gray-800 dark:text-white">{user.name}</p>

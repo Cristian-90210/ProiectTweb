@@ -47,7 +47,7 @@ export const Dropdown: React.FC<{ children: React.ReactNode; className?: string 
 
     return (
         <DropdownContext.Provider value={{ isOpen, toggle, close }}>
-            <div ref={ref} className={clsx('relative', className)}>
+            <div ref={ref} className={clsx('relative inline-flex', className)}>
                 {children}
             </div>
         </DropdownContext.Provider>
@@ -83,7 +83,7 @@ export const DropdownMenu: React.FC<{
     return (
         <div
             className={clsx(
-                'absolute mt-2 w-56 bg-white/90 dark:bg-[#0f2027]/95 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-300 transform origin-top z-50',
+                'absolute top-full mt-2 w-64 bg-white/90 dark:bg-[#0f2027]/95 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-300 transform origin-top z-50',
                 anchor === 'right' ? 'right-0 origin-top-right' : 'left-0 origin-top-left',
                 isOpen
                     ? 'opacity-100 scale-100 translate-y-0'
