@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { Header } from './Header';
+import { AtlantisNavbar } from './AtlantisNavbar';
 import { Footer } from './Footer';
 import { SideMenu } from '../components/SideMenu';
 import { GlobalSearch } from '../components/GlobalSearch';
@@ -14,7 +14,7 @@ export const MainLayout: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col font-sans transition-colors duration-300">
-            <Header
+            <AtlantisNavbar
                 onMenuClick={() => setIsMenuOpen(true)}
                 onSearchClick={() => setIsSearchOpen(true)}
             />

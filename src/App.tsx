@@ -13,6 +13,10 @@ import { Courses } from './pages/Courses';
 import { Coaches } from './pages/Coaches';
 import { Students } from './pages/Students';
 import { StudentDashboard } from './pages/StudentDashboard';
+import { StudentProfile } from './pages/student/StudentProfile';
+import { StudentSubscription } from './pages/student/StudentSubscription';
+import { StudentSchedule } from './pages/student/StudentSchedule';
+import { StudentResults } from './pages/student/StudentResults';
 import { CoachDashboard } from './pages/CoachDashboard';
 import { AdminProfile } from './pages/AdminProfile';
 import { UsersManagement } from './pages/admin/Users';
@@ -63,6 +67,26 @@ function App() {
                 <Route path="student" element={
                   <ProtectedRoute allowedRoles={['student']}>
                     <StudentDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="student/profile" element={
+                  <ProtectedRoute allowedRoles={['student']}>
+                    <StudentProfile />
+                  </ProtectedRoute>
+                } />
+                <Route path="student/subscription" element={
+                  <ProtectedRoute allowedRoles={['student']}>
+                    <StudentSubscription />
+                  </ProtectedRoute>
+                } />
+                <Route path="student/schedule" element={
+                  <ProtectedRoute allowedRoles={['student']}>
+                    <StudentSchedule />
+                  </ProtectedRoute>
+                } />
+                <Route path="student/results" element={
+                  <ProtectedRoute allowedRoles={['student']}>
+                    <StudentResults />
                   </ProtectedRoute>
                 } />
                 <Route path="coach" element={
