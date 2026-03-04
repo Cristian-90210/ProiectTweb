@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { mockBookings, mockStudents, mockCourses } from '../data/mockData';
-import { Calendar, CheckCircle, Clock, XCircle, RotateCcw, Trophy, MessageCircle, Send, Users, User, AlertTriangle, Activity } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, RotateCcw, Trophy, MessageCircle, Send, Users, User, AlertTriangle, Activity } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';
@@ -263,6 +263,34 @@ export const CoachDashboard: React.FC = () => {
         if (status === 'absent_medical') return t('coach_dashboard.attendance.absent_medical');
         if (status === 'late') return t('coach_dashboard.attendance.late');
         return t('coach_dashboard.attendance.recovery');
+    };
+
+    const attendanceStatusOptions = [
+        { value: 'present' as const, label: t('coach_dashboard.attendance.action.mark_present') },
+        { value: 'absent' as const, label: t('coach_dashboard.attendance.action.mark_absent') },
+        { value: 'absent_medical' as const, label: t('coach_dashboard.attendance.action.mark_absent_medical') },
+        { value: 'recovery' as const, label: t('coach_dashboard.attendance.action.mark_recovery') },
+        { value: 'late' as const, label: t('coach_dashboard.attendance.action.mark_late') },
+    ];
+
+    const getAttendanceSelectClass = (status?: AttendanceRecord['status']) => clsx(
+        "w-full md:w-56 rounded-lg border px-3 py-2 text-xs font-semibold outline-none transition-colors dark:bg-gray-700",
+        status === 'present' && "border-green-300 text-green-700 dark:text-green-300",
+        status === 'absent' && "border-red-300 text-red-700 dark:text-red-300",
+        status === 'absent_medical' && "border-orange-300 text-orange-700 dark:text-orange-300",
+        status === 'recovery' && "border-yellow-300 text-yellow-700 dark:text-yellow-300",
+        status === 'late' && "border-blue-300 text-blue-700 dark:text-blue-300",
+        !status && "border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-300"
+    );
+
+    const handleAttendanceSelectionChange = async (
+        studentId: string,
+        bookingId: string,
+        date: string,
+        nextStatus: string
+    ) => {
+        if (!nextStatus) return;
+        await handleMarkAttendance(studentId, bookingId, date, nextStatus as AttendanceRecord['status']);
     };
 
     const getSessionType = (time: string, slotSize: number): 'group' | 'individual' => {
@@ -694,62 +722,27 @@ export const CoachDashboard: React.FC = () => {
                                                                     </div>
                                                                 )}
                                                             </div>
-                                                            <div className="flex space-x-2">
-                                                                <button
-                                                                    onClick={() => handleMarkAttendance(session.studentId, session.id, session.date, 'present')}
-                                                                    className={clsx(
-                                                                        "px-3 py-1 rounded-full text-xs font-bold transition-colors",
-                                                                        existing?.status === 'present'
-                                                                            ? "bg-green-600 text-white"
-                                                                            : "bg-green-100 text-green-700 hover:bg-green-200"
-                                                                    )}
+                                                            <div className="flex flex-col items-end gap-2">
+                                                                <select
+                                                                    value={existing?.status ?? ''}
+                                                                    onChange={e => handleAttendanceSelectionChange(session.studentId, session.id, session.date, e.target.value)}
+                                                                    className={getAttendanceSelectClass(existing?.status)}
                                                                 >
-                                                                    <CheckCircle size={14} className="inline mr-1" />{t('coach_dashboard.attendance.action.mark_present')}
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => handleMarkAttendance(session.studentId, session.id, session.date, 'absent')}
-                                                                    className={clsx(
-                                                                        "px-3 py-1 rounded-full text-xs font-bold transition-colors",
-                                                                        existing?.status === 'absent'
-                                                                            ? "bg-red-600 text-white"
-                                                                            : "bg-red-100 text-red-700 hover:bg-red-200"
-                                                                    )}
-                                                                >
-                                                                    <XCircle size={14} className="inline mr-1" />{t('coach_dashboard.attendance.action.mark_absent')}
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => handleMarkAttendance(session.studentId, session.id, session.date, 'absent_medical')}
-                                                                    className={clsx(
-                                                                        "px-3 py-1 rounded-full text-xs font-bold transition-colors",
-                                                                        existing?.status === 'absent_medical'
-                                                                            ? "bg-orange-600 text-white"
-                                                                            : "bg-orange-100 text-orange-700 hover:bg-orange-200"
-                                                                    )}
-                                                                >
-                                                                    <AlertTriangle size={14} className="inline mr-1" />{t('coach_dashboard.attendance.action.mark_absent_medical')}
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => handleMarkAttendance(session.studentId, session.id, session.date, 'recovery')}
-                                                                    className={clsx(
-                                                                        "px-3 py-1 rounded-full text-xs font-bold transition-colors",
-                                                                        existing?.status === 'recovery'
-                                                                            ? "bg-yellow-600 text-white"
-                                                                            : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
-                                                                    )}
-                                                                >
-                                                                    <RotateCcw size={14} className="inline mr-1" />{t('coach_dashboard.attendance.action.mark_recovery')}
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => handleMarkAttendance(session.studentId, session.id, session.date, 'late')}
-                                                                    className={clsx(
-                                                                        "px-3 py-1 rounded-full text-xs font-bold transition-colors",
-                                                                        existing?.status === 'late'
-                                                                            ? "bg-blue-600 text-white"
-                                                                            : "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                                                                    )}
-                                                                >
-                                                                    <Clock size={14} className="inline mr-1" />{t('coach_dashboard.attendance.action.mark_late')}
-                                                                </button>
+                                                                    <option value="">Selecteaza status</option>
+                                                                    {attendanceStatusOptions.map(option => (
+                                                                        <option key={option.value} value={option.value}>
+                                                                            {option.label}
+                                                                        </option>
+                                                                    ))}
+                                                                </select>
+                                                                {existing && (
+                                                                    <span className={clsx(
+                                                                        "px-3 py-1 rounded-full text-xs font-bold uppercase",
+                                                                        getAttendanceStatusClass(existing.status)
+                                                                    )}>
+                                                                        {getAttendanceStatusLabel(existing.status)}
+                                                                    </span>
+                                                                )}
                                                             </div>
                                                         </div>
                                                     );
@@ -793,61 +786,18 @@ export const CoachDashboard: React.FC = () => {
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center space-x-2">
-                                                    <button
-                                                        onClick={() => handleMarkAttendance(session.studentId, session.id, session.date, 'present')}
-                                                        className={clsx(
-                                                            "px-3 py-1 rounded-full text-xs font-bold transition-colors",
-                                                            existing?.status === 'present'
-                                                                ? "bg-green-600 text-white"
-                                                                : "bg-green-100 text-green-700 hover:bg-green-200"
-                                                        )}
+                                                    <select
+                                                        value={existing?.status ?? ''}
+                                                        onChange={e => handleAttendanceSelectionChange(session.studentId, session.id, session.date, e.target.value)}
+                                                        className={getAttendanceSelectClass(existing?.status)}
                                                     >
-                                                        <CheckCircle size={14} className="inline mr-1" />{t('coach_dashboard.attendance.action.mark_present')}
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleMarkAttendance(session.studentId, session.id, session.date, 'absent')}
-                                                        className={clsx(
-                                                            "px-3 py-1 rounded-full text-xs font-bold transition-colors",
-                                                            existing?.status === 'absent'
-                                                                ? "bg-red-600 text-white"
-                                                                : "bg-red-100 text-red-700 hover:bg-red-200"
-                                                        )}
-                                                    >
-                                                        <XCircle size={14} className="inline mr-1" />{t('coach_dashboard.attendance.action.mark_absent')}
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleMarkAttendance(session.studentId, session.id, session.date, 'absent_medical')}
-                                                        className={clsx(
-                                                            "px-3 py-1 rounded-full text-xs font-bold transition-colors",
-                                                            existing?.status === 'absent_medical'
-                                                                ? "bg-orange-600 text-white"
-                                                                : "bg-orange-100 text-orange-700 hover:bg-orange-200"
-                                                        )}
-                                                    >
-                                                        <AlertTriangle size={14} className="inline mr-1" />{t('coach_dashboard.attendance.action.mark_absent_medical')}
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleMarkAttendance(session.studentId, session.id, session.date, 'recovery')}
-                                                        className={clsx(
-                                                            "px-3 py-1 rounded-full text-xs font-bold transition-colors",
-                                                            existing?.status === 'recovery'
-                                                                ? "bg-yellow-600 text-white"
-                                                                : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
-                                                        )}
-                                                    >
-                                                        <RotateCcw size={14} className="inline mr-1" />{t('coach_dashboard.attendance.action.mark_recovery')}
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleMarkAttendance(session.studentId, session.id, session.date, 'late')}
-                                                        className={clsx(
-                                                            "px-3 py-1 rounded-full text-xs font-bold transition-colors",
-                                                            existing?.status === 'late'
-                                                                ? "bg-blue-600 text-white"
-                                                                : "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                                                        )}
-                                                    >
-                                                        <Clock size={14} className="inline mr-1" />{t('coach_dashboard.attendance.action.mark_late')}
-                                                    </button>
+                                                        <option value="">Selecteaza status</option>
+                                                        {attendanceStatusOptions.map(option => (
+                                                            <option key={option.value} value={option.value}>
+                                                                {option.label}
+                                                            </option>
+                                                        ))}
+                                                    </select>
                                                     {existing && (
                                                         <>
                                                             <span className={clsx(

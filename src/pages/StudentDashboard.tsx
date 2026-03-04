@@ -24,7 +24,6 @@ export const StudentDashboard: React.FC = () => {
         return new Date(now.getFullYear(), now.getMonth(), 1);
     });
     const [attendanceMonthInitialized, setAttendanceMonthInitialized] = useState(false);
-    const [pendingAttendanceChoiceByDate, setPendingAttendanceChoiceByDate] = useState<Record<string, 'present' | 'absent'>>({});
     const [savingAttendanceDate, setSavingAttendanceDate] = useState<string | null>(null);
     const [attendanceFeedback, setAttendanceFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
@@ -83,7 +82,7 @@ export const StudentDashboard: React.FC = () => {
         });
     };
 
-    const handleMarkMyAttendanceForDate = async (date: string, bookingId: string, status: 'present' | 'absent') => {
+    const handleMarkMyAttendanceForDate = async (date: string, bookingId: string, status: AttendanceRecord['status']) => {
         if (!user) return;
 
         setSavingAttendanceDate(date);
@@ -100,11 +99,6 @@ export const StudentDashboard: React.FC = () => {
         setAttendance(prev => {
             const withoutSameDate = prev.filter(a => a.date !== date);
             return [record, ...withoutSameDate];
-        });
-        setPendingAttendanceChoiceByDate(prev => {
-            const updated = { ...prev };
-            delete updated[date];
-            return updated;
         });
         setSavingAttendanceDate(null);
         setAttendanceFeedback({ type: 'success', message: t('student_dashboard.attendance.saved_success') });
@@ -127,6 +121,24 @@ export const StudentDashboard: React.FC = () => {
         if (status === 'late') return t('student_dashboard.attendance.late');
         return t('student_dashboard.attendance.recovery');
     };
+
+    const attendanceStatusOptions = [
+        { value: 'present' as const, label: t('student_dashboard.attendance.present') },
+        { value: 'absent' as const, label: t('student_dashboard.attendance.absent') },
+        { value: 'absent_medical' as const, label: t('student_dashboard.attendance.absent_medical') },
+        { value: 'late' as const, label: t('student_dashboard.attendance.late') },
+        { value: 'recovery' as const, label: t('student_dashboard.attendance.recovery') },
+    ];
+
+    const getAttendanceSelectClass = (status?: AttendanceRecord['status']) => clsx(
+        "w-full text-[11px] py-1.5 px-2 rounded border font-semibold outline-none transition-colors disabled:opacity-60 dark:bg-gray-700",
+        status === 'present' && "border-green-300 text-green-700 dark:text-green-300",
+        status === 'absent' && "border-red-300 text-red-700 dark:text-red-300",
+        status === 'absent_medical' && "border-orange-300 text-orange-700 dark:text-orange-300",
+        status === 'late' && "border-blue-300 text-blue-700 dark:text-blue-300",
+        status === 'recovery' && "border-yellow-300 text-yellow-700 dark:text-yellow-300",
+        !status && "border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200"
+    );
 
     const trainingBookings = useMemo(() => {
         return myBookings.filter(b => b.status !== 'cancelled');
@@ -481,7 +493,6 @@ export const StudentDashboard: React.FC = () => {
                                             const existingAttendance = attendanceByDate.get(isoDate);
                                             const hasTraining = bookings.length > 0;
                                             const isSaving = savingAttendanceDate === isoDate;
-                                            const selectedStatus = pendingAttendanceChoiceByDate[isoDate];
 
                                             return (
                                                 <div
@@ -533,55 +544,26 @@ export const StudentDashboard: React.FC = () => {
 
                                                     {hasTraining && (
                                                         <div className="mt-auto space-y-2">
-                                                            <div className="flex gap-1">
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => {
-                                                                        setPendingAttendanceChoiceByDate(prev => ({ ...prev, [isoDate]: 'present' }));
-                                                                        setAttendanceFeedback(null);
-                                                                    }}
-                                                                    disabled={isSaving || existingAttendance?.confirmed === true}
-                                                                    className={clsx(
-                                                                        "flex-1 text-[11px] py-1 font-bold border disabled:opacity-60",
-                                                                        (selectedStatus ?? existingAttendance?.status) === 'present'
-                                                                            ? "bg-green-600 border-green-600 text-white"
-                                                                            : "bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200"
-                                                                    )}
-                                                                >
-                                                                    {t('student_dashboard.attendance.present')}
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => {
-                                                                        setPendingAttendanceChoiceByDate(prev => ({ ...prev, [isoDate]: 'absent' }));
-                                                                        setAttendanceFeedback(null);
-                                                                    }}
-                                                                    disabled={isSaving || existingAttendance?.confirmed === true}
-                                                                    className={clsx(
-                                                                        "flex-1 text-[11px] py-1 font-bold border disabled:opacity-60",
-                                                                        (selectedStatus ?? existingAttendance?.status) === 'absent'
-                                                                            ? "bg-red-600 border-red-600 text-white"
-                                                                            : "bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200"
-                                                                    )}
-                                                                >
-                                                                    {t('student_dashboard.attendance.absent')}
-                                                                </button>
-                                                            </div>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    const choice = pendingAttendanceChoiceByDate[isoDate];
-                                                                    if (!choice) {
-                                                                        setAttendanceFeedback({ type: 'error', message: t('student_dashboard.attendance.select_status_error') });
-                                                                        return;
-                                                                    }
-                                                                    handleMarkMyAttendanceForDate(isoDate, bookings[0].id, choice);
+                                                            <select
+                                                                value={existingAttendance?.status ?? ''}
+                                                                onChange={e => {
+                                                                    const nextStatus = e.target.value as AttendanceRecord['status'];
+                                                                    if (!nextStatus) return;
+                                                                    setAttendanceFeedback(null);
+                                                                    handleMarkMyAttendanceForDate(isoDate, bookings[0].id, nextStatus);
                                                                 }}
                                                                 disabled={isSaving || existingAttendance?.confirmed === true}
-                                                                className="w-full text-[11px] py-1.5 font-bold bg-host-cyan text-white hover:bg-host-blue transition-colors disabled:opacity-60"
+                                                                className={getAttendanceSelectClass(existingAttendance?.status)}
                                                             >
-                                                                {isSaving ? t('student_dashboard.attendance.saving') : t('student_dashboard.attendance.accept')}
-                                                            </button>
+                                                                <option value="">
+                                                                    {isSaving ? t('student_dashboard.attendance.saving') : 'Selecteaza status'}
+                                                                </option>
+                                                                {attendanceStatusOptions.map(option => (
+                                                                    <option key={option.value} value={option.value}>
+                                                                        {option.label}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
                                                         </div>
                                                     )}
                                                 </div>
