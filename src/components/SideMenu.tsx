@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Home, User, Users, BookOpen, LayoutDashboard, X, LogOut } from 'lucide-react';
+import { Home, User, Users, BookOpen, LayoutDashboard, X, LogOut, UserCircle, CreditCard, Calendar, Trophy, ClipboardList, Megaphone } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Logo } from '../components/Logo';
 import clsx from 'clsx';
@@ -21,21 +21,25 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
         ? [
             ...(user.role === 'student' ? [
                 { to: '/student', label: t('header.dashboard'), icon: LayoutDashboard },
-                { to: '/courses', label: t('header.courses'), icon: BookOpen },
-                { to: '/coaches', label: t('header.our_team'), icon: User },
+                { to: '/student/profile', label: t('dropdown.my_profile', { defaultValue: 'My Profile' }), icon: UserCircle },
+                { to: '/student/subscription', label: t('dropdown.my_subscription', { defaultValue: 'My Subscription' }), icon: CreditCard },
+                { to: '/student/schedule', label: t('dropdown.schedule', { defaultValue: 'Schedule' }), icon: Calendar },
+                { to: '/student/results', label: t('dropdown.results', { defaultValue: 'Results' }), icon: Trophy },
             ] : []),
             ...(user.role === 'coach' ? [
                 { to: '/coach', label: t('header.dashboard'), icon: LayoutDashboard },
-                { to: '/courses', label: t('header.courses'), icon: BookOpen },
-                { to: '/students', label: t('header.students'), icon: Users },
+                { to: '/coach/profile', label: t('dropdown.my_profile', { defaultValue: 'My Profile' }), icon: UserCircle },
+                { to: '/coach/schedule', label: t('dropdown.training_schedule', { defaultValue: 'Training Schedule' }), icon: Calendar },
+                { to: '/coach/attendance', label: t('dropdown.attendance', { defaultValue: 'Attendance' }), icon: ClipboardList },
+                { to: '/coach/results', label: t('dropdown.student_results', { defaultValue: 'Student Results' }), icon: Trophy },
             ] : []),
             ...(user.role === 'admin' ? [
                 { to: '/admin', label: t('header.dashboard'), icon: LayoutDashboard },
-                { to: '/admin/users', label: 'Users', icon: User },
-                { to: '/admin/reservations', label: 'Reservations', icon: BookOpen },
-                { to: '/admin/announcements', label: 'Announcements', icon: BookOpen },
+                { to: '/admin/users', label: t('dropdown.manage_users', { defaultValue: 'Manage Users' }), icon: Users },
+                { to: '/admin/reservations', label: t('dropdown.reservations', { defaultValue: 'Reservations' }), icon: BookOpen },
+                { to: '/admin/announcements', label: t('dropdown.announcements', { defaultValue: 'Announcements' }), icon: Megaphone },
                 { to: '/courses', label: t('header.courses'), icon: BookOpen },
-                { to: '/coaches', label: t('header.coaches'), icon: User },
+                { to: '/coaches', label: t('header.coaches', { defaultValue: 'Coaches' }), icon: User },
                 { to: '/students', label: t('header.students'), icon: Users },
             ] : []),
         ]
@@ -73,6 +77,26 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                         <X size={20} className="text-gray-500" />
                     </button>
                 </div>
+
+                {/* Profile Card */}
+                {user && (
+                    <div className="p-5 border-b border-gray-100 dark:border-gray-800 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800/50 dark:to-gray-900">
+                        <div className="flex items-center space-x-3">
+                            <img
+                                src={user.avatar || `https://ui-avatars.com/api/?background=0ea5e9&color=fff&name=${encodeURIComponent(user.name)}`}
+                                alt={user.name}
+                                className="w-12 h-12 rounded-full object-cover ring-2 ring-host-cyan/30 shadow"
+                            />
+                            <div className="min-w-0 flex-1">
+                                <p className="text-sm font-bold text-gray-800 dark:text-white truncate">{user.name}</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
+                                <span className="mt-1 inline-block text-[10px] font-bold uppercase tracking-widest text-host-cyan bg-host-cyan/10 px-2 py-0.5 rounded-full">
+                                    {user.role}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Navigation */}
                 <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
