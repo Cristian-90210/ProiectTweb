@@ -166,19 +166,19 @@ const UserAvatarDropdown: React.FC = () => {
     const coachItems = (
         <>
             <DropdownLabel>{t('header.coach', { defaultValue: 'Coach' })}</DropdownLabel>
-            <DropdownItem onClick={() => go('/coach')}>
+            <DropdownItem onClick={() => go('/coach/profile')}>
                 <UserCircleIcon className="w-4 h-4" />
                 {t('dropdown.my_profile', { defaultValue: 'My Profile' })}
             </DropdownItem>
-            <DropdownItem onClick={() => go('/coach')}>
+            <DropdownItem onClick={() => go('/coach/schedule')}>
                 <CalendarDaysIcon className="w-4 h-4" />
                 {t('dropdown.training_schedule', { defaultValue: 'Training Schedule' })}
             </DropdownItem>
-            <DropdownItem onClick={() => go('/coach')}>
+            <DropdownItem onClick={() => go('/coach/attendance')}>
                 <ClipboardDocumentListIcon className="w-4 h-4" />
                 {t('dropdown.attendance', { defaultValue: 'Attendance' })}
             </DropdownItem>
-            <DropdownItem onClick={() => go('/coach')}>
+            <DropdownItem onClick={() => go('/coach/results')}>
                 <TrophyIcon className="w-4 h-4" />
                 {t('dropdown.student_results', { defaultValue: 'Student Results' })}
             </DropdownItem>

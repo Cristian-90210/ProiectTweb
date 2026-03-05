@@ -18,6 +18,10 @@ import { StudentSubscription } from './pages/student/StudentSubscription';
 import { StudentSchedule } from './pages/student/StudentSchedule';
 import { StudentResults } from './pages/student/StudentResults';
 import { CoachDashboard } from './pages/CoachDashboard';
+import { CoachProfile } from './pages/coach/CoachProfile';
+import { CoachTrainingSchedule } from './pages/coach/CoachTrainingSchedule';
+import { CoachAttendance } from './pages/coach/CoachAttendance';
+import { CoachStudentResults } from './pages/coach/CoachStudentResults';
 import { AdminProfile } from './pages/AdminProfile';
 import { UsersManagement } from './pages/admin/Users';
 import { Reservations } from './pages/admin/Reservations';
@@ -92,6 +96,26 @@ function App() {
                 <Route path="coach" element={
                   <ProtectedRoute allowedRoles={['coach']}>
                     <CoachDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="coach/profile" element={
+                  <ProtectedRoute allowedRoles={['coach']}>
+                    <CoachProfile />
+                  </ProtectedRoute>
+                } />
+                <Route path="coach/schedule" element={
+                  <ProtectedRoute allowedRoles={['coach']}>
+                    <CoachTrainingSchedule />
+                  </ProtectedRoute>
+                } />
+                <Route path="coach/attendance" element={
+                  <ProtectedRoute allowedRoles={['coach']}>
+                    <CoachAttendance />
+                  </ProtectedRoute>
+                } />
+                <Route path="coach/results" element={
+                  <ProtectedRoute allowedRoles={['coach']}>
+                    <CoachStudentResults />
                   </ProtectedRoute>
                 } />
                 <Route path="admin" element={
