@@ -13,7 +13,15 @@ import { Courses } from './pages/Courses';
 import { Coaches } from './pages/Coaches';
 import { Students } from './pages/Students';
 import { StudentDashboard } from './pages/StudentDashboard';
+import { StudentProfile } from './pages/student/StudentProfile';
+import { StudentSubscription } from './pages/student/StudentSubscription';
+import { StudentSchedule } from './pages/student/StudentSchedule';
+import { StudentResults } from './pages/student/StudentResults';
 import { CoachDashboard } from './pages/CoachDashboard';
+import { CoachProfile } from './pages/coach/CoachProfile';
+import { CoachTrainingSchedule } from './pages/coach/CoachTrainingSchedule';
+import { CoachAttendance } from './pages/coach/CoachAttendance';
+import { CoachStudentResults } from './pages/coach/CoachStudentResults';
 import { AdminProfile } from './pages/AdminProfile';
 import { UsersManagement } from './pages/admin/Users';
 import { Reservations } from './pages/admin/Reservations';
@@ -24,6 +32,8 @@ import { Checkout } from './pages/Checkout';
 import { NotFound } from './pages/NotFound';
 import { Unauthorized } from './pages/Unauthorized';
 import { Forbidden } from './pages/Forbidden';
+import { InternalServerError } from './pages/InternalServerError';
+import { ServerStatus } from './pages/ServerStatus';
 
 // Protected Route Wrapper
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({ children, allowedRoles }) => {
@@ -52,6 +62,7 @@ function App() {
                 <Route path="/404" element={<NotFound />} />
                 <Route path="/401" element={<Unauthorized />} />
                 <Route path="/403" element={<Forbidden />} />
+                <Route path="/500" element={<InternalServerError />} />
 
                 {/* Public Landing Page */}
                 <Route path="/" element={<MainLayout />}>
@@ -62,9 +73,49 @@ function App() {
                       <StudentDashboard />
                     </ProtectedRoute>
                   } />
+                  <Route path="student/profile" element={
+                    <ProtectedRoute allowedRoles={['student']}>
+                      <StudentProfile />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="student/subscription" element={
+                    <ProtectedRoute allowedRoles={['student']}>
+                      <StudentSubscription />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="student/schedule" element={
+                    <ProtectedRoute allowedRoles={['student']}>
+                      <StudentSchedule />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="student/results" element={
+                    <ProtectedRoute allowedRoles={['student']}>
+                      <StudentResults />
+                    </ProtectedRoute>
+                  } />
                   <Route path="coach" element={
                     <ProtectedRoute allowedRoles={['coach']}>
                       <CoachDashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="coach/profile" element={
+                    <ProtectedRoute allowedRoles={['coach']}>
+                      <CoachProfile />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="coach/schedule" element={
+                    <ProtectedRoute allowedRoles={['coach']}>
+                      <CoachTrainingSchedule />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="coach/attendance" element={
+                    <ProtectedRoute allowedRoles={['coach']}>
+                      <CoachAttendance />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="coach/results" element={
+                    <ProtectedRoute allowedRoles={['coach']}>
+                      <CoachStudentResults />
                     </ProtectedRoute>
                   } />
                   <Route path="admin" element={
@@ -90,12 +141,8 @@ function App() {
                     </ProtectedRoute>
                   } />
 
-                <Route path="courses" element={<Courses />} /Route path="server-status" element={<ServerStatus />} />
-                <Route path="coaches" element={<Coaches />} />
-                <Route path="cart" element={<CartPage />} />
-                <Route path="checkout" element={<Checkout />} />
                   <Route path="courses" element={<Courses />} />
-                  <Route path="courses/:planId" element={<SubscriptionDetails />} />
+                  <Route path="server-status" element={<ServerStatus />} />
                   <Route path="coaches" element={<Coaches />} />
                   <Route path="cart" element={<CartPage />} />
                   <Route path="checkout" element={<Checkout />} />
