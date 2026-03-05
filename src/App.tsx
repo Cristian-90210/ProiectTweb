@@ -90,8 +90,7 @@ function App() {
                     </ProtectedRoute>
                   } />
 
-                <Route path="courses" element={<Courses />} />
-                <Route path="server-status" element={<ServerStatus />} />
+                <Route path="courses" element={<Courses />} /Route path="server-status" element={<ServerStatus />} />
                 <Route path="coaches" element={<Coaches />} />
                 <Route path="cart" element={<CartPage />} />
                 <Route path="checkout" element={<Checkout />} />
