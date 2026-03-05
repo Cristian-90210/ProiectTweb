@@ -226,3 +226,10 @@ export const noteService = {
         return newNote;
     }
 };
+
+export const serverStatusService = {
+    healthCheck: async (): Promise<{ status: string }> => {
+        await delay(1000);
+        throw new Error('500 Internal Server Error: Mock database connection failed');
+    },
+};
