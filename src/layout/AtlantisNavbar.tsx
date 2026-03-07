@@ -43,9 +43,9 @@ import {
    ══════════════════════════════════════════════════════════════ */
 
 const Navbar: React.FC<{ children: React.ReactNode; className?: string }> = ({
-    children,
-    className,
-}) => (
+                                                                                 children,
+                                                                                 className,
+                                                                             }) => (
     <nav className={clsx('container mx-auto px-6 py-4', className)}>
         <div className="relative flex items-center">{children}</div>
     </nav>
@@ -57,8 +57,6 @@ const NavbarSection: React.FC<{
 }> = ({ children, className }) => (
     <div className={clsx('flex items-center', className)}>{children}</div>
 );
-
-const NavbarSpacer: React.FC = () => <div className="flex-1" />;
 
 const NavbarItem: React.FC<{
     label: string;
@@ -131,6 +129,12 @@ const UserAvatarDropdown: React.FC = () => {
 
     const go = (path: string) => {
         navigate(path);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -244,7 +248,7 @@ const UserAvatarDropdown: React.FC = () => {
                 {roleItems}
 
                 <DropdownDivider />
-                <DropdownItem onClick={logout} destructive>
+                <DropdownItem onClick={handleLogout} destructive>
                     <ArrowRightStartOnRectangleIcon className="w-4 h-4" />
                     {t('header.logout', { defaultValue: 'Sign out' })}
                 </DropdownItem>

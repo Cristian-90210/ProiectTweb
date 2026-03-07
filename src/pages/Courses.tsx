@@ -1,12 +1,29 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '../components/PageHeader';
 import { CTAButton } from '../components/CTAButton';
 import { subscriptionPlans } from '../data/mockData';
 import { Clock, Tag, Zap, Car, User, ShoppingCart, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 export const Courses: React.FC = () => {
     const { addItem, items } = useCart();
+    const { user } = useAuth();
+    const navigate = useNavigate();
+
+    const handleAddToCart = (plan: typeof subscriptionPlans[0]) => {
+        if (!user) {
+            navigate('/login');
+            return;
+        }
+        addItem({
+            id: plan.id,
+            name: plan.name,
+            price: plan.price,
+            discountPrice: plan.discountPrice ?? undefined,
+        });
+    };
     const categoryLabels: Record<string, { label: string; icon: React.ElementType; color: string }> = {
         standard: { label: 'Standard', icon: Tag, color: 'text-blue-400' },
         pro: { label: 'Pro', icon: Zap, color: 'text-purple-400' },
@@ -84,12 +101,7 @@ export const Courses: React.FC = () => {
 
                                     {/* Add to cart button */}
                                     <CTAButton
-                                        onClick={() => addItem({
-                                            id: plan.id,
-                                            name: plan.name,
-                                            price: plan.price,
-                                            discountPrice: plan.discountPrice ?? undefined,
-                                        })}
+                                        onClick={() => handleAddToCart(plan)}
                                         style={items.some(i => i.id === plan.id) ? {
                                             borderRadius: '9999px',
                                             background: 'linear-gradient(145deg, #22c55e 0%, #16a34a 100%)',

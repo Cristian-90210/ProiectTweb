@@ -40,6 +40,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
     }, [items]);
 
+    // Golește coșul când utilizatorul se deconectează
+    useEffect(() => {
+        const handleLogout = () => setItems([]);
+        window.addEventListener('user-logout', handleLogout);
+        return () => window.removeEventListener('user-logout', handleLogout);
+    }, []);
+
     const addItem = useCallback((item: Omit<CartItem, 'quantity'>) => {
         setItems(prev => {
             const existing = prev.find(i => i.id === item.id);
