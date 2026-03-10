@@ -43,6 +43,23 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onSearchClick }) =>
     const location = useLocation();
 
     const navigateAndScroll = (to: string) => {
+        if (to.startsWith('#')) {
+            // If already on landing page, scroll to section
+            if (location.pathname === '/') {
+                const el = document.getElementById(to.substring(1));
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+            }
+            // Navigate to landing then scroll
+            navigate('/');
+            setTimeout(() => {
+                const el = document.getElementById(to.substring(1));
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+            return;
+        }
         navigate(to);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -92,6 +109,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onSearchClick }) =>
             { label: t('header.home'), to: '/' },
             { label: t('header.courses'), to: '/courses' },
             { label: t('header.our_team'), to: '/coaches' },
+            { label: t('header.faq'), to: '#faq-section' },
         ];
 
     return (

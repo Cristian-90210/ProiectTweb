@@ -8,7 +8,8 @@
         "our_team": "OUR TEAM",
         "dashboard": "DASHBOARD",
         "login": "LOGIN",
-        "logout": "LOGOUT"
+        "logout": "LOGOUT",
+        "faq": "FAQ"
     },
     "hero": {
         "platform_title": "Swimming School Platform",
