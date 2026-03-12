@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 
 export interface CartItem {
     id: string;
@@ -16,9 +16,12 @@ interface CartContextType {
     clearCart: () => void;
     totalItems: number;
     totalPrice: number;
+    toastItem: string | null;
+    dismissToast: () => void;
 }
 
 const CART_STORAGE_KEY = 'atlantis_cart';
+const TOAST_DURATION = 4000;
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -34,11 +37,30 @@ function loadCartFromStorage(): CartItem[] {
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [items, setItems] = useState<CartItem[]>(loadCartFromStorage);
+    const [toastItem, setToastItem] = useState<string | null>(null);
+    const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Sincronizează automat cu localStorage la fiecare schimbare
     useEffect(() => {
         localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
     }, [items]);
+
+    const dismissToast = useCallback(() => {
+        setToastItem(null);
+        if (toastTimer.current) {
+            clearTimeout(toastTimer.current);
+            toastTimer.current = null;
+        }
+    }, []);
+
+    const showToast = useCallback((name: string) => {
+        if (toastTimer.current) clearTimeout(toastTimer.current);
+        setToastItem(name);
+        toastTimer.current = setTimeout(() => {
+            setToastItem(null);
+            toastTimer.current = null;
+        }, TOAST_DURATION);
+    }, []);
 
     const addItem = useCallback((item: Omit<CartItem, 'quantity'>) => {
         setItems(prev => {
@@ -48,7 +70,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
             return [...prev, { ...item, quantity: 1 }];
         });
-    }, []);
+        showToast(item.name);
+    }, [showToast]);
 
     const removeItem = useCallback((id: string) => {
         setItems(prev => prev.filter(i => i.id !== id));
@@ -71,7 +94,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const totalPrice = items.reduce((sum, i) => sum + (i.discountPrice || i.price) * i.quantity, 0);
 
     return (
-        <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice }}>
+        <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice, toastItem, dismissToast }}>
             {children}
         </CartContext.Provider>
     );

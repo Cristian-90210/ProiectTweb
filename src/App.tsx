@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { CartToast } from './components/CartToast';
 
 // Layout
 import { MainLayout } from './layout/MainLayout';
@@ -159,6 +160,7 @@ function App() {
 
               <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>
+            <CartToast />
           </BrowserRouter>
         </AuthProvider>
       </CartProvider>

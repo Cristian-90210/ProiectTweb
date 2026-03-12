@@ -337,7 +337,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
     return (
         <header
             className={clsx(
-                'fixed inset-x-0 top-0 z-40 transition-transform duration-300 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-[0_1px_3px_rgba(0,0,0,0.06)]',
+                'fixed inset-x-0 top-0 z-40 transition-transform duration-300 bg-white dark:bg-gray-900',
                 hidden ? '-translate-y-full' : 'translate-y-0',
             )}
         >
