@@ -65,9 +65,22 @@ const NavbarItem: React.FC<{
     onClick?: () => void;
 }> = ({ label, to, isActive, onClick }) => {
     const navigate = useNavigate();
+    const location = useLocation();
     const handleClick = () => {
-        navigate(to);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (to.startsWith('#')) {
+            if (location.pathname === '/') {
+                const el = document.getElementById(to.substring(1));
+                if (el) { el.scrollIntoView({ behavior: 'smooth' }); onClick?.(); return; }
+            }
+            navigate('/');
+            setTimeout(() => {
+                const el = document.getElementById(to.substring(1));
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        } else {
+            navigate(to);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
         onClick?.();
     };
 
@@ -317,6 +330,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
             { label: t('header.home'), to: '/' },
             { label: t('header.courses'), to: '/courses' },
             { label: t('header.our_team'), to: '/coaches' },
+            { label: t('header.faq'), to: '/faq' },
         ];
 
     const navigateAndScroll = (to: string) => {
@@ -327,7 +341,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
     return (
         <header
             className={clsx(
-                'fixed inset-x-0 top-0 z-40 transition-transform duration-300 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-[0_1px_3px_rgba(0,0,0,0.06)]',
+                'fixed inset-x-0 top-0 z-40 transition-transform duration-300 bg-white dark:bg-gray-900',
                 hidden ? '-translate-y-full' : 'translate-y-0',
             )}
         >

@@ -44,11 +44,15 @@ export const Checkout: React.FC = () => {
     /* dacă coșul e gol, redirect la coș */
     if (items.length === 0 && !isSuccess) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-[#0f1e2d] gap-4">
-                <p className="text-gray-600 dark:text-gray-300 text-lg">Coșul este gol.</p>
+            <div className="-mt-24 min-h-screen pt-24 relative overflow-hidden bg-host-gradient animate-gradient-x flex flex-col items-center justify-center gap-4">
+                <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                    <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/30 rounded-full mix-blend-overlay filter blur-3xl animate-blob" />
+                    <div className="absolute top-[20%] right-[-20%] w-[50%] h-[50%] bg-cyan-600/20 rounded-full mix-blend-overlay filter blur-3xl animate-blob animation-delay-2000" />
+                </div>
+                <p className="relative z-10 text-blue-100/80 text-lg">Coșul este gol.</p>
                 <button
                     onClick={() => navigate('/courses')}
-                    className="px-6 py-3 bg-gradient-to-r from-[#00c6ff] to-[#0072ff] text-white font-bold rounded-full"
+                    className="relative z-10 px-6 py-3 bg-gradient-to-r from-[#00c6ff] to-[#0072ff] text-white font-bold rounded-full"
                 >
                     Vezi Abonamente
                 </button>
@@ -93,16 +97,21 @@ export const Checkout: React.FC = () => {
     /* ─── SUCCESS SCREEN ─── */
     if (isSuccess) {
         return (
-            <div className="min-h-screen bg-gray-50 dark:bg-[#0f1e2d] flex items-center justify-center px-4">
-                <div className="text-center max-w-md animate-in zoom-in duration-500">
-                    <div className="w-24 h-24 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-6">
+            <div className="-mt-24 min-h-screen pt-24 relative overflow-hidden bg-host-gradient animate-gradient-x flex items-center justify-center px-4">
+                <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                    <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/30 rounded-full mix-blend-overlay filter blur-3xl animate-blob" />
+                    <div className="absolute top-[20%] right-[-20%] w-[50%] h-[50%] bg-cyan-600/20 rounded-full mix-blend-overlay filter blur-3xl animate-blob animation-delay-2000" />
+                    <div className="absolute bottom-[-20%] left-[30%] w-[40%] h-[40%] bg-host-blue/40 rounded-full mix-blend-overlay filter blur-3xl animate-blob animation-delay-4000" />
+                </div>
+                <div className="relative z-10 text-center max-w-md animate-in zoom-in duration-500">
+                    <div className="w-24 h-24 rounded-full bg-emerald-500/15 border border-emerald-400/20 flex items-center justify-center mx-auto mb-6">
                         <CheckCircle className="w-14 h-14 text-emerald-400 animate-in zoom-in duration-700" />
                     </div>
-                    <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-3">Plată reușită! 🎉</h1>
-                    <p className="text-gray-500 dark:text-gray-400 mb-2">
+                    <h1 className="text-3xl font-extrabold text-white mb-3">Plată reușită! 🎉</h1>
+                    <p className="text-blue-100/70 mb-2">
                         Abonamentul tău a fost activat cu succes.
                     </p>
-                    <p className="text-sm text-gray-400 dark:text-gray-500 mb-8">
+                    <p className="text-sm text-blue-200/50 mb-8">
                         Un email de confirmare a fost trimis la <span className="text-host-cyan font-medium">{form.email}</span>
                     </p>
                     <button
@@ -118,39 +127,59 @@ export const Checkout: React.FC = () => {
 
     /* ─── CHECKOUT FORM ─── */
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-[#0f1e2d] pt-24 pb-16 px-4">
-            <div className="container mx-auto max-w-5xl">
+        <div className="-mt-24 min-h-screen relative overflow-hidden bg-host-gradient animate-gradient-x pt-24 pb-16 px-4">
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/30 rounded-full mix-blend-overlay filter blur-3xl animate-blob" />
+                <div className="absolute top-[20%] right-[-20%] w-[50%] h-[50%] bg-cyan-600/20 rounded-full mix-blend-overlay filter blur-3xl animate-blob animation-delay-2000" />
+                <div className="absolute bottom-[-20%] left-[30%] w-[40%] h-[40%] bg-host-blue/40 rounded-full mix-blend-overlay filter blur-3xl animate-blob animation-delay-4000" />
+            </div>
+            <div className="container mx-auto max-w-5xl relative z-10">
 
                 {/* Header */}
-                <div className="flex items-center gap-4 mb-8">
+                <div className="flex items-center gap-4 mb-4">
                     <button
                         onClick={() => navigate('/cart')}
-                        className="p-2 rounded-full bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300 hover:text-[#00c6ff] transition-colors shadow-sm"
+                        className="p-2 rounded-full bg-white/10 border border-white/15 text-white/70 hover:text-[#00c6ff] hover:bg-white/15 transition-colors"
                     >
                         <ArrowLeft size={20} />
                     </button>
                     <div>
-                        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white flex items-center gap-3">
+                        <h1 className="text-3xl font-extrabold text-white flex items-center gap-3">
                             <CreditCard className="text-[#00c6ff]" size={28} />
                             Finalizare Comandă
                         </h1>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5 flex items-center gap-1">
+                        <p className="text-blue-200/60 text-sm mt-0.5 flex items-center gap-1">
                             <Lock size={13} className="text-emerald-400" /> Plată securizată și criptată
                         </p>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                {/* Progress stepper */}
+                <div className="flex items-center gap-2 mb-5 text-xs font-semibold">
+                    {['Coș', 'Date personale', 'Plată', 'Confirmare'].map((step, i) => (
+                        <React.Fragment key={step}>
+                            <span className={i === 2
+                                ? 'text-host-cyan border-b border-host-cyan pb-0.5'
+                                : i < 2 ? 'text-blue-200/40 line-through' : 'text-blue-200/30'
+                            }>
+                                {step}
+                            </span>
+                            {i < 3 && <span className="text-white/20 text-[10px]">›</span>}
+                        </React.Fragment>
+                    ))}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
                     {/* ─── FORMULAR ─── */}
-                    <form onSubmit={handleSubmit} className="lg:col-span-3 space-y-6">
+                    <form onSubmit={handleSubmit} className="lg:col-span-3 space-y-4">
 
                         {/* Date personale */}
-                        <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-sm">
-                            <h2 className="font-bold text-gray-900 dark:text-white text-lg mb-5 flex items-center gap-2">
+                        <div className="bg-white/8 backdrop-blur-sm border border-white/15 rounded-2xl p-5">
+                            <h2 className="font-bold text-white text-lg mb-3 flex items-center gap-2">
                                 <User size={18} className="text-[#00c6ff]" /> Date Personale
                             </h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <Field label="Nume complet" icon={<User size={15} />} error={errors.name}>
                                     <input
                                         type="text"
@@ -182,14 +211,22 @@ export const Checkout: React.FC = () => {
                         </div>
 
                         {/* Date card */}
-                        <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-sm">
-                            <h2 className="font-bold text-gray-900 dark:text-white text-lg mb-5 flex items-center gap-2">
-                                <CreditCard size={18} className="text-[#00c6ff]" /> Date Card Bancar
-                            </h2>
+                        <div className="bg-white/8 backdrop-blur-sm border border-white/15 rounded-2xl p-5">
+                            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                                <h2 className="font-bold text-white text-lg flex items-center gap-2">
+                                    <CreditCard size={18} className="text-[#00c6ff]" /> Date Card Bancar
+                                </h2>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[11px] text-blue-200/40 mr-1">Acceptăm:</span>
+                                    {['Visa', 'Mastercard', 'Apple Pay'].map(m => (
+                                        <span key={m} className="px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-[10px] font-semibold text-blue-100/60 uppercase tracking-wide">{m}</span>
+                                    ))}
+                                </div>
+                            </div>
 
                             {/* Card preview */}
                             <div
-                                className="relative h-44 rounded-2xl mb-6 overflow-hidden cursor-pointer select-none"
+                                className="relative h-36 rounded-2xl mb-4 overflow-hidden cursor-pointer select-none"
                                 style={{ perspective: '1000px' }}
                                 onClick={() => setFlipped(f => !f)}
                             >
@@ -202,18 +239,18 @@ export const Checkout: React.FC = () => {
                                 >
                                     {/* Față */}
                                     <div
-                                        className="absolute inset-0 rounded-2xl p-6 flex flex-col justify-between"
+                                        className="absolute inset-0 rounded-2xl p-5 flex flex-col justify-between"
                                         style={{
                                             background: 'linear-gradient(135deg, #020024 0%, #090979 50%, #00d4ff 100%)',
                                             backfaceVisibility: 'hidden',
                                         }}
                                     >
                                         <div className="flex justify-between items-start">
-                                            <div className="w-10 h-7 rounded bg-yellow-400/80 flex items-center justify-center text-[8px] font-bold text-gray-900">CHIP</div>
-                                            <span className="text-white font-bold text-lg tracking-widest opacity-80">{brand || 'CARD'}</span>
+                                            <div className="w-9 h-6 rounded bg-yellow-400/80 flex items-center justify-center text-[8px] font-bold text-gray-900">CHIP</div>
+                                            <span className="text-white font-bold text-base tracking-widest opacity-80">{brand || 'CARD'}</span>
                                         </div>
                                         <div>
-                                            <p className="text-white font-mono text-xl tracking-[0.25em] mb-3">
+                                            <p className="text-white font-mono text-lg tracking-[0.25em] mb-1">
                                                 {form.cardNumber || '•••• •••• •••• ••••'}
                                             </p>
                                             <div className="flex justify-between text-white/70 text-xs">
@@ -231,19 +268,19 @@ export const Checkout: React.FC = () => {
                                             transform: 'rotateY(180deg)',
                                         }}
                                     >
-                                        <div className="h-10 bg-black/40 mt-6" />
-                                        <div className="px-6 mt-4 flex items-center justify-end gap-3">
-                                            <div className="flex-1 h-8 bg-white/20 rounded" />
-                                            <div className="bg-white rounded px-3 py-1.5 font-mono font-bold text-gray-900 text-sm min-w-[50px] text-center">
+                                        <div className="h-8 bg-black/40 mt-4" />
+                                        <div className="px-5 mt-3 flex items-center justify-end gap-3">
+                                            <div className="flex-1 h-7 bg-white/20 rounded" />
+                                            <div className="bg-white rounded px-3 py-1 font-mono font-bold text-gray-900 text-sm min-w-[50px] text-center">
                                                 {form.cvv || '•••'}
                                             </div>
                                         </div>
-                                        <p className="text-white/40 text-[10px] text-center mt-4">Apasă cardul pentru a-l întoarce</p>
+                                        <p className="text-white/40 text-[10px] text-center mt-2">Apasă cardul pentru a-l întoarce</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <Field label="Număr card" icon={<CreditCard size={15} />} error={errors.cardNumber} className="sm:col-span-2">
                                     <input
                                         type="text"
@@ -292,7 +329,7 @@ export const Checkout: React.FC = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full py-4 bg-gradient-to-r from-[#00c6ff] to-[#0072ff] text-white font-extrabold rounded-2xl text-lg flex items-center justify-center gap-3 hover:shadow-xl hover:shadow-cyan-500/30 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed"
+                            className="w-full py-3 bg-gradient-to-r from-[#00c6ff] to-[#0072ff] text-white font-extrabold rounded-2xl text-lg flex items-center justify-center gap-3 hover:shadow-xl hover:shadow-cyan-500/30 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed"
                         >
                             {isLoading ? (
                                 <>
@@ -313,31 +350,31 @@ export const Checkout: React.FC = () => {
 
                     {/* ─── SUMAR COMANDĂ ─── */}
                     <div className="lg:col-span-2">
-                        <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-sm sticky top-24">
-                            <h2 className="font-bold text-gray-900 dark:text-white text-lg mb-4">Sumar Comandă</h2>
-                            <div className="space-y-3 mb-4">
+                        <div className="bg-white/8 backdrop-blur-sm border border-white/15 rounded-2xl p-5 sticky top-24">
+                            <h2 className="font-bold text-white text-lg mb-3">Sumar Comandă</h2>
+                            <div className="space-y-2.5 mb-3">
                                 {items.map(item => {
                                     const price = item.discountPrice ?? item.price;
                                     return (
                                         <div key={item.id} className="flex justify-between text-sm">
-                                            <span className="text-gray-600 dark:text-gray-400 truncate flex-1 mr-2">
+                                            <span className="text-blue-200/75 truncate flex-1 mr-2">
                                                 {item.name} × {item.quantity}
                                             </span>
-                                            <span className="font-semibold text-gray-800 dark:text-gray-200 flex-shrink-0">
+                                            <span className="font-semibold text-white/90 flex-shrink-0">
                                                 {price * item.quantity} MDL
                                             </span>
                                         </div>
                                     );
                                 })}
                             </div>
-                            <div className="border-t border-gray-100 dark:border-white/10 pt-4">
+                            <div className="border-t border-white/10 pt-4">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-gray-600 dark:text-gray-400 font-medium">Total</span>
+                                    <span className="text-blue-200/70 font-medium">Total</span>
                                     <span className="text-2xl font-extrabold text-[#00c6ff]">{totalPrice} MDL</span>
                                 </div>
                             </div>
 
-                            <div className="mt-6 flex flex-col gap-2 text-xs text-gray-400 dark:text-gray-500">
+                            <div className="mt-4 flex flex-col gap-2 text-xs text-blue-200/65">
                                 <div className="flex items-center gap-2"><Lock size={12} className="text-emerald-400" /> Plată 100% securizată</div>
                                 <div className="flex items-center gap-2"><ShieldCheck size={12} className="text-emerald-400" /> Criptare SSL 256-bit</div>
                                 <div className="flex items-center gap-2"><CheckCircle size={12} className="text-emerald-400" /> Confirmare imediată pe email</div>
@@ -356,7 +393,7 @@ function Field({
                }: { label: string; icon: React.ReactNode; error?: string; children: React.ReactNode; className?: string }) {
     return (
         <div className={className}>
-            <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+            <label className="flex items-center gap-1.5 text-xs font-semibold text-blue-200/70 uppercase tracking-wide mb-1.5">
                 <span className="text-[#00c6ff]">{icon}</span>{label}
             </label>
             {children}
@@ -367,11 +404,11 @@ function Field({
 
 function inputCls(hasError: boolean) {
     return [
-        'w-full px-4 py-2.5 rounded-xl text-sm bg-gray-50 dark:bg-white/5 border',
-        'text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-600',
+        'w-full px-4 py-2.5 rounded-xl text-sm bg-white/5 border',
+        'text-white placeholder-white/30',
         'focus:outline-none focus:ring-2 focus:ring-[#00c6ff]/50 transition-all duration-200',
         hasError
             ? 'border-red-400 focus:ring-red-400/40'
-            : 'border-gray-200 dark:border-white/10 focus:border-[#00c6ff]',
+            : 'border-white/10 focus:border-[#00c6ff]',
     ].join(' ');
 }

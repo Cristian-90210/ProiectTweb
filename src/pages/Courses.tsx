@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '../components/PageHeader';
 import { CTAButton } from '../components/CTAButton';
+import { CartToast } from '../components/CartToast';
 import { subscriptionPlans } from '../data/mockData';
 import { Clock, Tag, Zap, Car, User, ShoppingCart, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
@@ -121,6 +122,7 @@ export const Courses: React.FC = () => {
                     </div>
                 </div>
             </div>
+            <CartToast />
         </div>
     );
 };
