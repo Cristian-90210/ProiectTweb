@@ -4,30 +4,52 @@ import { mockStudents, mockCourses, mockCoaches, mockAdmins, mockAnnouncements, 
 // Simulate async API delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+// ── localStorage-backed student persistence ──
+const STUDENTS_KEY = 'students';
+
+function getStoredStudents(): Student[] {
+    const raw = localStorage.getItem(STUDENTS_KEY);
+    if (raw) {
+        try { return JSON.parse(raw); } catch { /* fall through */ }
+    }
+    // Seed localStorage with mock data on first visit
+    localStorage.setItem(STUDENTS_KEY, JSON.stringify(mockStudents));
+    return [...mockStudents];
+}
+
+function saveStudents(students: Student[]): void {
+    localStorage.setItem(STUDENTS_KEY, JSON.stringify(students));
+}
+
 export const studentService = {
     getAll: async (): Promise<Student[]> => {
-        await delay(500);
-        return [...mockStudents];
+        await delay(300);
+        return getStoredStudents();
     },
     getById: async (id: string): Promise<Student | undefined> => {
-        await delay(300);
-        return mockStudents.find(s => s.id === id);
+        await delay(200);
+        return getStoredStudents().find(s => s.id === id);
     },
     create: async (student: Student): Promise<Student> => {
-        await delay(600);
-        console.log('Created student:', student);
+        await delay(400);
+        const students = getStoredStudents();
+        students.push(student);
+        saveStudents(students);
         return student;
     },
     update: async (id: string, updates: Partial<Student>): Promise<Student> => {
-        await delay(500);
-        console.log('Updated student:', id, updates);
-        const student = mockStudents.find(s => s.id === id);
-        if (!student) throw new Error('Student not found');
-        return { ...student, ...updates };
+        await delay(400);
+        const students = getStoredStudents();
+        const idx = students.findIndex(s => s.id === id);
+        if (idx === -1) throw new Error('Student not found');
+        students[idx] = { ...students[idx], ...updates };
+        saveStudents(students);
+        return students[idx];
     },
     delete: async (id: string): Promise<void> => {
-        await delay(400);
-        console.log('Deleted student:', id);
+        await delay(300);
+        const students = getStoredStudents().filter(s => s.id !== id);
+        saveStudents(students);
     }
 };
 
