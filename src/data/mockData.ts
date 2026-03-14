@@ -372,8 +372,8 @@ export const mockCoachSchedule: CoachScheduleSlot[] = [
 ];
 
 export const mockSpecialOffers: SpecialOffer[] = [
-    { id: 'off1', studentId: 's1', studentName: 'Andrei Popa', title: 'Reducere Abonament Martie', description: '20% reducere la reînnoire abonament luna martie.', discount: 20, validUntil: '2026-03-15', sentBy: 'admin-1', sentDate: '2026-02-15' },
-    { id: 'off2', studentId: 's3', studentName: 'Mihai Voicu', title: 'Sesiune Gratuită', description: 'O sesiune gratuită de recuperare.', discount: 100, validUntil: '2026-02-28', sentBy: 'admin-1', sentDate: '2026-02-14' },
+    { id: 'off1', studentId: 's1', studentName: 'Andrei Popa', title: 'Reducere Abonament Martie', description: '20% reducere la reînnoire abonament luna martie.', discount: 20, validUntil: '2026-03-15', sentBy: 'admin-1', sentByName: 'Super Admin', sentDate: '2026-02-15' },
+    { id: 'off2', studentId: 's3', studentName: 'Mihai Voicu', title: 'Sesiune Gratuită', description: 'O sesiune gratuită de recuperare.', discount: 100, validUntil: '2026-02-28', sentBy: 'admin-1', sentByName: 'Super Admin', sentDate: '2026-02-14' },
 ];
 
 export const mockStudentNotes: StudentNote[] = [
@@ -461,4 +461,25 @@ export const mockUserAccounts: MockUserAccount[] = [
         role: 'admin',
         avatar: 'https://ui-avatars.com/api/?background=7c3aed&color=fff&name=Manager+Stancu',
     },
+];
+
+export const mockNotifications = [
+    // ── ADMIN ──
+    { id: 'notif-a1', type: 'alert' as const,   title: 'Rezervare nouă',              message: 'Andrei Popov a făcut o rezervare pentru cursul Advanced Freestyle.',          timestamp: '2026-03-14T22:00:00', read: false, targetRole: 'admin' as const,   link: '/admin/reservations' },
+    { id: 'notif-a2', type: 'info' as const,    title: 'Utilizator nou înregistrat',  message: 'Elena Dumitru s-a înregistrat pe platformă.',                                timestamp: '2026-03-14T20:30:00', read: false, targetRole: 'admin' as const,   link: '/admin/users' },
+    { id: 'notif-a3', type: 'warning' as const, title: 'Curs aproape plin',           message: 'Cursul "Advanced Freestyle" mai are un singur loc disponibil.',              timestamp: '2026-03-14T18:15:00', read: true,  targetRole: 'admin' as const,   link: '/courses' },
+    { id: 'notif-a4', type: 'success' as const, title: 'Plată confirmată',            message: 'Plata abonamentului Pro 3 Luni de la George Enescu a fost procesată.',       timestamp: '2026-03-14T14:00:00', read: true,  targetRole: 'admin' as const,   link: '/admin/reservations' },
+    // ── COACH ──
+    { id: 'notif-c1', type: 'info' as const,    title: 'Orar actualizat',             message: 'Antrenamentul de Luni a fost mutat la ora 10:00.',                           timestamp: '2026-03-14T21:00:00', read: false, targetRole: 'coach' as const,   link: '/coach/schedule' },
+    { id: 'notif-c2', type: 'success' as const, title: 'Prezență confirmată',         message: 'Ai marcat prezența pentru 6 studenți la antrenamentul din 14 Martie.',       timestamp: '2026-03-14T17:00:00', read: false, targetRole: 'coach' as const,   link: '/coach/attendance' },
+    { id: 'notif-c3', type: 'warning' as const, title: 'Student absent',              message: 'Mihai Voicu a absentat de la 3 antrenamente consecutive.',                   timestamp: '2026-03-13T09:00:00', read: true,  targetRole: 'coach' as const,   link: '/students' },
+    { id: 'notif-c4', type: 'alert' as const,   title: 'Mesaj nou',                   message: 'Ai primit un mesaj de la Super Admin referitor la studenți.',                 timestamp: '2026-03-12T15:30:00', read: true,  targetRole: 'coach' as const,   link: '/coach' },
+    // ── STUDENT ──
+    { id: 'notif-s1', type: 'success' as const, title: 'Rezervare confirmată',        message: 'Rezervarea ta pentru antrenamentul de Vineri la ora 16:00 a fost confirmată.',timestamp: '2026-03-14T22:30:00', read: false, targetRole: 'student' as const, link: '/student/schedule' },
+    { id: 'notif-s2', type: 'info' as const,    title: 'Anunț nou',                   message: 'Bazinul principal va fi închis Duminică pentru mentenanță.',                  timestamp: '2026-03-14T10:00:00', read: false, targetRole: 'student' as const, link: '/student' },
+    { id: 'notif-s3', type: 'warning' as const, title: 'Abonament expiră curând',     message: 'Abonamentul tău expiră pe 1 Aprilie 2026. Reînnoire din timp!',              timestamp: '2026-03-14T08:00:00', read: false, targetRole: 'student' as const, link: '/student/subscription' },
+    { id: 'notif-s4', type: 'success' as const, title: 'Rezultat nou înregistrat',    message: 'Antrenorul Cătălina a înregistrat un nou rezultat personal la freestyle 50m.',timestamp: '2026-03-13T17:00:00', read: true,  targetRole: 'student' as const, link: '/student/results' },
+    { id: 'notif-s5', type: 'alert' as const,   title: 'Ofertă specială',             message: 'Beneficiezi de 20% reducere la reînnoire abonament luna Martie!',            timestamp: '2026-03-12T09:00:00', read: true,  targetRole: 'student' as const, link: '/courses' },
+    // ── ALL ──
+    { id: 'notif-all1', type: 'info' as const,  title: 'Actualizare platformă',       message: 'Platforma Atlantis SwimSchool a fost actualizată cu funcționalități noi.',   timestamp: '2026-03-10T12:00:00', read: true,  targetRole: 'all' as const,     link: '/' },
 ];

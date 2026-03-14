@@ -17,6 +17,7 @@ import {
     DropdownDivider,
 } from '../components/ui/Dropdown';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { NotificationBell } from '../components/NotificationBell';
 
 import {
     SunIcon,
@@ -390,6 +391,9 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
 
                     {/* Cart */}
                     <CartBadge />
+
+                    {/* Notifications Bell - only for authenticated users */}
+                    {user && <NotificationBell />}
 
                     {/* Language Switcher */}
                     <LanguageSwitcher />

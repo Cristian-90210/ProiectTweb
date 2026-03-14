@@ -164,3 +164,16 @@ export interface StudentNote {
     authorName: string;
     createdAt: string;
 }
+
+export type NotificationType = 'info' | 'success' | 'warning' | 'alert';
+
+export interface AppNotification {
+    id: string;
+    type: NotificationType;
+    title: string;
+    message: string;
+    timestamp: string; // ISO string
+    read: boolean;
+    targetRole: 'all' | 'student' | 'coach' | 'admin';
+    link?: string; // optional route to navigate to on click
+}
