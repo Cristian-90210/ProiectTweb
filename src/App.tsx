@@ -24,6 +24,7 @@ import { CoachProfile } from './pages/coach/CoachProfile';
 import { CoachTrainingSchedule } from './pages/coach/CoachTrainingSchedule';
 import { CoachAttendance } from './pages/coach/CoachAttendance';
 import { CoachStudentResults } from './pages/coach/CoachStudentResults';
+import { CoachChat } from './pages/coach/CoachChat';
 import { AdminProfile } from './pages/AdminProfile';
 import { UsersManagement } from './pages/admin/Users';
 import { Reservations } from './pages/admin/Reservations';
@@ -120,6 +121,11 @@ function App() {
                     <Route path="coach/results" element={
                       <ProtectedRoute allowedRoles={['coach']}>
                         <CoachStudentResults />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="coach/chat" element={
+                      <ProtectedRoute allowedRoles={['coach']}>
+                        <CoachChat />
                       </ProtectedRoute>
                     } />
                     <Route path="admin" element={
