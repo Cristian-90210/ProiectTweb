@@ -15,6 +15,7 @@ import { Courses } from './pages/Courses';
 import { Coaches } from './pages/Coaches';
 import { Students } from './pages/Students';
 import { StudentDashboard } from './pages/StudentDashboard';
+import { FAQPage } from './pages/FAQPage';
 import { StudentProfile } from './pages/student/StudentProfile';
 import { StudentSubscription } from './pages/student/StudentSubscription';
 import { StudentSchedule } from './pages/student/StudentSchedule';
@@ -37,7 +38,6 @@ import { Unauthorized } from './pages/Unauthorized';
 import { Forbidden } from './pages/Forbidden';
 import { InternalServerError } from './pages/InternalServerError';
 import { ServerStatus } from './pages/ServerStatus';
-import { FAQPage } from './pages/FAQPage';
 
 // Protected Route Wrapper
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({ children, allowedRoles }) => {
