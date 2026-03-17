@@ -193,9 +193,24 @@
             "title": "Attendance History",
             "present": "Present",
             "absent": "Absent",
+            "absent_medical": "Medical Absent",
+            "late": "Late",
             "recovery": "Recovery",
             "no_records": "No attendance records found.",
-            "booking": "Booking"
+            "booking": "Booking",
+            "self_only": "You can only mark your own attendance directly from the calendar.",
+            "calendar_date": "Calendar date",
+            "select_status": "Choose status",
+            "confirm_choice": "I accept that this is my choice (present/absent).",
+            "accept": "Accept",
+            "training_day": "training",
+            "saving": "Saving...",
+            "saved_success": "Attendance saved successfully.",
+            "already_marked": "You already marked attendance for this date.",
+            "select_status_error": "Choose Present or Absent first.",
+            "accept_error": "Tick Accept to confirm your choice.",
+            "pending_teacher_confirmation": "Waiting for coach",
+            "confirmed_by_teacher": "Confirmed by coach"
         },
         "results": {
             "title": "My Results",
@@ -210,7 +225,25 @@
         "recovery": {
             "title": "Recovery Sessions",
             "session": "Recovery session",
-            "no_sessions": "No recovery sessions scheduled."
+            "no_sessions": "No recovery sessions scheduled.",
+            "active_credits": "Available credits",
+            "pending_requests": "Pending requests",
+            "confirmed_requests": "Confirmed requests",
+            "instructions": "Pick an available day in the calendar and send a recovery request. The coach will confirm it afterwards.",
+            "available": "available",
+            "selected_date": "Selected date: {{date}}",
+            "no_date_selected": "No date selected yet.",
+            "send_request": "Send recovery request",
+            "sending": "Sending...",
+            "request_sent": "Recovery request sent and waiting for confirmation.",
+            "select_date_error": "Select an available date.",
+            "date_not_available": "Selected date is not available for recovery.",
+            "requests_title": "Recovery requests",
+            "request_made": "Requested on",
+            "no_requests": "You don't have recovery requests yet.",
+            "status_pending": "pending",
+            "status_confirmed": "confirmed",
+            "status_rejected": "rejected"
         },
         "messages": {
             "title": "Messages",
@@ -248,13 +281,38 @@
         },
         "attendance": {
             "title": "Mark Attendance",
+            "mode_group": "Group",
+            "mode_individual": "Individual",
             "present": "Present",
             "absent": "Absent",
+            "absent_medical": "Medical Absent",
+            "late": "Late",
             "recovery": "Recovery",
+            "health_alert": "Medical Alert",
+            "health_alert_banner": "Warning: {{count}} active medical alerts in selected slot.",
+            "progress": "Progress",
+            "recovery_credits": "Make-ups: {{count}}",
+            "pending_confirmations": "Pending confirmations (from students)",
+            "no_pending_confirmations": "No pending confirmations.",
+            "no_group_sessions": "No group sessions available for attendance marking.",
+            "no_individual_sessions": "No individual sessions available for attendance marking.",
+            "nothing_to_confirm": "There are no students to confirm for the selected slot.",
+            "confirmation_success": "Confirmation completed by coach: {{count}} student(s) at {{hour}}.",
+            "mark_all_present_success": "Marked {{count}} student(s) as present.",
+            "session_confirmed_by_coach": "Session confirmed by coach: {{count}} student(s) at {{hour}}.",
+            "confirm_hour": "Hour to confirm",
+            "awaiting_coach_confirmation": "Awaiting confirmation",
+            "confirmed": "Confirmed",
+            "confirmed_by_you": "Confirmed by you",
             "action": {
                 "mark_present": "Present",
                 "mark_absent": "Absent",
-                "mark_recovery": "Recovery"
+                "mark_absent_medical": "Medical Absent",
+                "mark_late": "Late",
+                "mark_recovery": "Recovery",
+                "confirm_final": "Final Confirm",
+                "confirm_all_for_hour": "Confirm all at {{hour}}",
+                "mark_all_present": "All Present"
             }
         },
         "results": {
@@ -268,7 +326,13 @@
         },
         "recovery": {
             "title": "Students for Recovery",
-            "no_students": "No students for recovery."
+            "no_students": "No students for recovery.",
+            "pending_requests": "Pending recovery requests",
+            "no_pending_requests": "No new recovery requests.",
+            "confirm_request": "Confirm recovery",
+            "request_confirmed": "Recovery confirmed for {{date}} and added to calendar.",
+            "request_confirm_error": "Could not confirm recovery request.",
+            "in_calendar": "In calendar"
         },
         "individual": {
             "title": "Individual Sessions",

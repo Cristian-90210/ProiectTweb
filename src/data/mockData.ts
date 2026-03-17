@@ -1,4 +1,4 @@
-import type { User, Student, Coach, Course, SwimmingResult, AttendanceRecord, Message, Subscription, CoachScheduleSlot, SpecialOffer, StudentNote } from '../types';
+import type { User, Student, Coach, Course, SwimmingResult, AttendanceRecord, Message, Subscription, CoachScheduleSlot, SpecialOffer, StudentNote, StudentHealthFlag, ProgressSnapshot, RecoveryCredit } from '../types';
 
 export interface MockUserAccount extends User {
     password: string;
@@ -320,6 +320,42 @@ export const mockBookings: import('../types').Booking[] = [
         date: '2026-02-22',
         time: '16:00',
         status: 'upcoming'
+    },
+    {
+        id: 'b6',
+        studentId: 's1',
+        coachId: 'c1',
+        courseId: 'crs2',
+        date: '2026-02-19',
+        time: '17:00',
+        status: 'upcoming'
+    },
+    {
+        id: 'b7',
+        studentId: 's2',
+        coachId: 'c1',
+        courseId: 'crs2',
+        date: '2026-02-19',
+        time: '17:00',
+        status: 'upcoming'
+    },
+    {
+        id: 'b8',
+        studentId: 's4',
+        coachId: 'c1',
+        courseId: 'crs1',
+        date: '2026-02-19',
+        time: '17:00',
+        status: 'upcoming'
+    },
+    {
+        id: 'b9',
+        studentId: 's5',
+        coachId: 'c1',
+        courseId: 'crs2',
+        date: '2026-02-19',
+        time: '17:00',
+        status: 'upcoming'
     }
 ];
 
@@ -342,6 +378,10 @@ export const mockAttendance: AttendanceRecord[] = [
     { id: 'att4', bookingId: 'b2', studentId: 'user-1', date: '2026-02-13', status: 'recovery', markedBy: 'c2' },
     { id: 'att5', bookingId: 'b1', studentId: 's1', date: '2026-02-10', status: 'present', markedBy: 'c3' },
     { id: 'att6', bookingId: 'b1', studentId: 's4', date: '2026-02-10', status: 'absent', markedBy: 'c3' },
+    { id: 'att7', bookingId: 'b6', studentId: 's1', date: '2026-02-19', status: 'present', markedBy: 's1', confirmed: false, submittedByStudent: true },
+    { id: 'att8', bookingId: 'b7', studentId: 's2', date: '2026-02-19', status: 'absent', markedBy: 's2', confirmed: false, submittedByStudent: true },
+    { id: 'att9', bookingId: 'b8', studentId: 's4', date: '2026-02-19', status: 'present', markedBy: 's4', confirmed: false, submittedByStudent: true },
+    { id: 'att10', bookingId: 'b9', studentId: 's5', date: '2026-02-19', status: 'absent', markedBy: 's5', confirmed: false, submittedByStudent: true },
 ];
 
 export const mockMessages: Message[] = [
@@ -372,14 +412,30 @@ export const mockCoachSchedule: CoachScheduleSlot[] = [
 ];
 
 export const mockSpecialOffers: SpecialOffer[] = [
-    { id: 'off1', studentId: 's1', studentName: 'Andrei Popa', title: 'Reducere Abonament Martie', description: '20% reducere la reînnoire abonament luna martie.', discount: 20, validUntil: '2026-03-15', sentBy: 'admin-1', sentDate: '2026-02-15' },
-    { id: 'off2', studentId: 's3', studentName: 'Mihai Voicu', title: 'Sesiune Gratuită', description: 'O sesiune gratuită de recuperare.', discount: 100, validUntil: '2026-02-28', sentBy: 'admin-1', sentDate: '2026-02-14' },
+    { id: 'off1', studentId: 's1', studentName: 'Andrei Popa', title: 'Reducere Abonament Martie', description: '20% reducere la reînnoire abonament luna martie.', discount: 20, validUntil: '2026-03-15', sentBy: 'admin-1', sentByName: 'Super Admin', sentDate: '2026-02-15' },
+    { id: 'off2', studentId: 's3', studentName: 'Mihai Voicu', title: 'Sesiune Gratuită', description: 'O sesiune gratuită de recuperare.', discount: 100, validUntil: '2026-02-28', sentBy: 'admin-1', sentByName: 'Super Admin', sentDate: '2026-02-14' },
 ];
 
 export const mockStudentNotes: StudentNote[] = [
     { id: 'n1', studentId: 's1', studentName: 'Andrei Popa', content: 'Are nevoie de atenție suplimentară la tehnica de respirație.', authorId: 'admin-1', authorName: 'Super Admin', createdAt: '2026-02-10T10:00:00' },
     { id: 'n2', studentId: 's2', studentName: 'Elena Dumitru', content: 'Pregătire pentru competiția regională din martie.', authorId: 'admin-1', authorName: 'Super Admin', createdAt: '2026-02-12T14:30:00' },
     { id: 'n3', studentId: 's4', studentName: 'Ioana Stan', content: 'Părinții solicită program flexibil din cauza școlii.', authorId: 'admin-1', authorName: 'Super Admin', createdAt: '2026-02-13T09:00:00' },
+];
+
+export const mockStudentHealthFlags: StudentHealthFlag[] = [
+    { id: 'hf1', studentId: 's1', type: 'asthma', severity: 'high', protocolText: 'Inhalator înainte de încălzire. Pauză la respirație grea.', isActive: true },
+    { id: 'hf2', studentId: 's4', type: 'chlorine_allergy', severity: 'medium', protocolText: 'Duș imediat după ședință, evită banda cu clor intens.', isActive: true },
+];
+
+export const mockProgressSnapshots: ProgressSnapshot[] = [
+    { id: 'pg1', studentId: 's1', metricKey: 'freestyle_technique', metricValue: 62, recordedAt: '2026-02-18T10:00:00' },
+    { id: 'pg2', studentId: 's2', metricKey: 'freestyle_technique', metricValue: 84, recordedAt: '2026-02-18T10:00:00' },
+    { id: 'pg3', studentId: 's4', metricKey: 'water_confidence', metricValue: 48, recordedAt: '2026-02-18T10:00:00' },
+    { id: 'pg4', studentId: 's5', metricKey: 'freestyle_speed', metricValue: 79, recordedAt: '2026-02-18T10:00:00' },
+];
+
+export const mockRecoveryCredits: RecoveryCredit[] = [
+    { id: 'rc1', studentId: 's2', sourceAttendanceId: 'att8', status: 'active', expiresAt: '2026-03-21T23:59:59' },
 ];
 
 // ─── MOCK USER ACCOUNTS (email + parolă pentru login) ───────────────────────
