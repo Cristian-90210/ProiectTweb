@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-import { CartToast } from './components/CartToast';
 
 // Layout
 import { MainLayout } from './layout/MainLayout';
@@ -35,7 +34,6 @@ import { Unauthorized } from './pages/Unauthorized';
 import { Forbidden } from './pages/Forbidden';
 import { InternalServerError } from './pages/InternalServerError';
 import { ServerStatus } from './pages/ServerStatus';
-import { FAQPage } from './pages/FAQPage';
 
 // Protected Route Wrapper
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({ children, allowedRoles }) => {
@@ -146,7 +144,6 @@ function App() {
                 <Route path="courses" element={<Courses />} />
                 <Route path="server-status" element={<ServerStatus />} />
                 <Route path="coaches" element={<Coaches />} />
-                <Route path="faq" element={<FAQPage />} />
                 <Route path="cart" element={<CartPage />} />
                 <Route path="checkout" element={<Checkout />} />
 
@@ -160,7 +157,6 @@ function App() {
 
               <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>
-            <CartToast />
           </BrowserRouter>
         </AuthProvider>
       </CartProvider>
