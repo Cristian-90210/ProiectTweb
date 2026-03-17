@@ -108,7 +108,6 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onSearchClick }) =>
             ] : []),
             ...(user.role === 'coach' ? [
                 { label: t('header.dashboard'), to: '/coach' },
-                { label: t('header.courses'), to: '/courses' },
                 { label: t('header.students'), to: '/students' },
             ] : []),
             ...(user.role === 'admin' ? [
@@ -176,7 +175,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onSearchClick }) =>
                             <Search size={20} />
                         </button>
 
-                        <CartIcon />
+                        {user?.role !== 'coach' && <CartIcon />}
 
                         <LanguageSwitcher />
 

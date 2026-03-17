@@ -30,6 +30,18 @@ export interface Student {
     avatar?: string; // Add optional avatar
 }
 
+export type MedicalFlagType = 'asthma' | 'chlorine_allergy' | 'other';
+export type MedicalFlagSeverity = 'low' | 'medium' | 'high';
+
+export interface StudentHealthFlag {
+    id: string;
+    studentId: string;
+    type: MedicalFlagType;
+    severity: MedicalFlagSeverity;
+    protocolText: string;
+    isActive: boolean;
+}
+
 export interface Admin {
     id: string;
     name: string;
@@ -104,8 +116,40 @@ export interface AttendanceRecord {
     bookingId: string;
     studentId: string;
     date: string;
-    status: 'present' | 'absent' | 'recovery';
+    status: 'present' | 'absent' | 'absent_medical' | 'recovery' | 'late';
     markedBy: string; // coach or admin id
+    confirmed?: boolean;
+    confirmedBy?: string;
+    confirmedAt?: string;
+    submittedByStudent?: boolean;
+    note?: string;
+}
+
+export interface RecoveryCredit {
+    id: string;
+    studentId: string;
+    sourceAttendanceId: string;
+    status: 'active' | 'reserved' | 'consumed' | 'expired';
+    expiresAt: string;
+    consumedSessionId?: string;
+}
+
+export interface RecoveryRequest {
+    id: string;
+    studentId: string;
+    date: string;
+    status: 'pending' | 'confirmed' | 'rejected';
+    requestedAt: string;
+    confirmedBy?: string;
+    confirmedAt?: string;
+}
+
+export interface ProgressSnapshot {
+    id: string;
+    studentId: string;
+    metricKey: string;
+    metricValue: number; // 0..100
+    recordedAt: string;
 }
 
 export interface Message {

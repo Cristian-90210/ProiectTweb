@@ -315,7 +315,6 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
             ...(user.role === 'coach'
                 ? [
                     { label: t('header.dashboard'), to: '/coach' },
-                    { label: t('header.courses'), to: '/courses' },
                     { label: t('header.students'), to: '/students' },
                 ]
                 : []),

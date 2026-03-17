@@ -82,7 +82,8 @@ export const Students: React.FC = () => {
                     email: formData.email,
                     age: Number(formData.age),
                     level: formData.level,
-                    status: 'Active'
+                    status: 'Active',
+                    role: 'student'
                 };
                 await studentService.create(newStudent);
             }

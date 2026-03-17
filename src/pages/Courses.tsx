@@ -52,7 +52,8 @@ export const Courses: React.FC = () => {
                             return (
                                 <div
                                     key={plan.id}
-                                    className="relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                                    onClick={() => navigate(`/courses/${plan.id}`)}
+                                    className="relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
                                 >
                                     {/* Category badge */}
                                     <div className={`inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 bg-gray-100 dark:bg-gray-700 ${cat.color}`}>
