@@ -5,7 +5,7 @@ import { PageHeader } from '../components/PageHeader';
 import { Table, TableRow } from '../components/TableRow';
 import type { Student } from '../types';
 import { studentService } from '../services/api';
-import { Trash2, Plus, X, Search, Edit2 } from 'lucide-react';
+import { Trash2, Plus, X, Search, Edit2, CheckCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 
@@ -16,6 +16,7 @@ export const Students: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
+    const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
     useEffect(() => {
         loadStudents();
@@ -88,6 +89,8 @@ export const Students: React.FC = () => {
             }
             await loadStudents(); // Reload list
             resetForm();
+            setSuccessMsg(editingId ? 'Student updated successfully!' : 'Student enrolled successfully!');
+            setTimeout(() => setSuccessMsg(null), 3000);
         } catch (error) {
             console.error('Operation failed', error);
             alert('Failed to save student');
@@ -119,6 +122,13 @@ export const Students: React.FC = () => {
             />
 
             <div className="container mx-auto px-6 -mt-10 relative z-20">
+                {/* Success Message */}
+                {successMsg && (
+                    <div className="mb-4 px-4 py-3 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-700 text-sm font-medium animate-in slide-in-from-top-4 duration-300 flex items-center gap-2">
+                        <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                        {successMsg}
+                    </div>
+                )}
                 <div className="flex flex-col md:flex-row justify-between items-center mb-6 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md border border-gray-100 dark:border-gray-700">
                     <div className="flex items-center space-x-4 w-full md:w-auto">
                         <div className="relative w-full md:w-64">
