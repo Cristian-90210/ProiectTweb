@@ -138,6 +138,7 @@ const CartBadge: React.FC = () => {
 const UserAvatarDropdown: React.FC = () => {
     const { user, logout } = useAuth();
     const { t } = useTranslation();
+    const { clearCart } = useCart();
     const navigate = useNavigate();
 
     if (!user) return null;
@@ -148,6 +149,7 @@ const UserAvatarDropdown: React.FC = () => {
     };
 
     const handleLogout = () => {
+        clearCart();
         logout();
         navigate('/');
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -315,6 +317,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
             ...(user.role === 'coach'
                 ? [
                     { label: t('header.dashboard'), to: '/coach' },
+                    { label: t('header.courses'), to: '/courses' },
                     { label: t('header.students'), to: '/students' },
                 ]
                 : []),

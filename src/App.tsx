@@ -37,6 +37,7 @@ import { Unauthorized } from './pages/Unauthorized';
 import { Forbidden } from './pages/Forbidden';
 import { InternalServerError } from './pages/InternalServerError';
 import { ServerStatus } from './pages/ServerStatus';
+import { FAQPage } from './pages/FAQPage';
 
 // Protected Route Wrapper
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({ children, allowedRoles }) => {
@@ -151,6 +152,7 @@ function App() {
                     } />
 
                     <Route path="courses" element={<Courses />} />
+                    <Route path="courses/:id" element={<Navigate to="/courses" replace />} />
                     <Route path="server-status" element={<ServerStatus />} />
                     <Route path="coaches" element={<Coaches />} />
                     <Route path="faq" element={<FAQPage />} />
