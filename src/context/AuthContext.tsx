@@ -34,6 +34,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const logout = () => {
         setUser(null);
         localStorage.removeItem('user');
+        localStorage.removeItem('atlantis_cart');
+        window.dispatchEvent(new Event('user-logout'));
     };
 
     return (

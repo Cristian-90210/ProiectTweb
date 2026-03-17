@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { CartToast } from './components/CartToast';
+import { NotificationsProvider } from './context/NotificationsContext';
 
 // Layout
 import { MainLayout } from './layout/MainLayout';
@@ -22,6 +24,7 @@ import { CoachProfile } from './pages/coach/CoachProfile';
 import { CoachTrainingSchedule } from './pages/coach/CoachTrainingSchedule';
 import { CoachAttendance } from './pages/coach/CoachAttendance';
 import { CoachStudentResults } from './pages/coach/CoachStudentResults';
+import { CoachChat } from './pages/coach/CoachChat';
 import { AdminProfile } from './pages/AdminProfile';
 import { UsersManagement } from './pages/admin/Users';
 import { Reservations } from './pages/admin/Reservations';
@@ -53,114 +56,123 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: strin
 
 function App() {
   return (
-    <ThemeProvider>
-      <CartProvider>
-        <AuthProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/404" element={<NotFound />} />
-              <Route path="/401" element={<Unauthorized />} />
-              <Route path="/403" element={<Forbidden />} />
-              <Route path="/500" element={<InternalServerError />} />
+      <ThemeProvider>
+        <CartProvider>
+          <AuthProvider>
+            <BrowserRouter>
+              <NotificationsProvider>
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/404" element={<NotFound />} />
+                  <Route path="/401" element={<Unauthorized />} />
+                  <Route path="/403" element={<Forbidden />} />
+                  <Route path="/500" element={<InternalServerError />} />
 
-              {/* Public Landing Page */}
-              <Route path="/" element={<MainLayout />}>
-                <Route index element={<Landing />} />
+                  {/* Public Landing Page */}
+                  <Route path="/" element={<MainLayout />}>
+                    <Route index element={<Landing />} />
 
-                <Route path="student" element={
-                  <ProtectedRoute allowedRoles={['student']}>
-                    <StudentDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="student/profile" element={
-                  <ProtectedRoute allowedRoles={['student']}>
-                    <StudentProfile />
-                  </ProtectedRoute>
-                } />
-                <Route path="student/subscription" element={
-                  <ProtectedRoute allowedRoles={['student']}>
-                    <StudentSubscription />
-                  </ProtectedRoute>
-                } />
-                <Route path="student/schedule" element={
-                  <ProtectedRoute allowedRoles={['student']}>
-                    <StudentSchedule />
-                  </ProtectedRoute>
-                } />
-                <Route path="student/results" element={
-                  <ProtectedRoute allowedRoles={['student']}>
-                    <StudentResults />
-                  </ProtectedRoute>
-                } />
-                <Route path="coach" element={
-                  <ProtectedRoute allowedRoles={['coach']}>
-                    <CoachDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="coach/profile" element={
-                  <ProtectedRoute allowedRoles={['coach']}>
-                    <CoachProfile />
-                  </ProtectedRoute>
-                } />
-                <Route path="coach/schedule" element={
-                  <ProtectedRoute allowedRoles={['coach']}>
-                    <CoachTrainingSchedule />
-                  </ProtectedRoute>
-                } />
-                <Route path="coach/attendance" element={
-                  <ProtectedRoute allowedRoles={['coach']}>
-                    <CoachAttendance />
-                  </ProtectedRoute>
-                } />
-                <Route path="coach/results" element={
-                  <ProtectedRoute allowedRoles={['coach']}>
-                    <CoachStudentResults />
-                  </ProtectedRoute>
-                } />
-                <Route path="admin" element={
-                  <ProtectedRoute allowedRoles={['admin']}>
-                    <AdminProfile />
-                  </ProtectedRoute>
-                } />
+                    <Route path="student" element={
+                      <ProtectedRoute allowedRoles={['student']}>
+                        <StudentDashboard />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="student/profile" element={
+                      <ProtectedRoute allowedRoles={['student']}>
+                        <StudentProfile />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="student/subscription" element={
+                      <ProtectedRoute allowedRoles={['student']}>
+                        <StudentSubscription />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="student/schedule" element={
+                      <ProtectedRoute allowedRoles={['student']}>
+                        <StudentSchedule />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="student/results" element={
+                      <ProtectedRoute allowedRoles={['student']}>
+                        <StudentResults />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="coach" element={
+                      <ProtectedRoute allowedRoles={['coach']}>
+                        <CoachDashboard />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="coach/profile" element={
+                      <ProtectedRoute allowedRoles={['coach']}>
+                        <CoachProfile />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="coach/schedule" element={
+                      <ProtectedRoute allowedRoles={['coach']}>
+                        <CoachTrainingSchedule />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="coach/attendance" element={
+                      <ProtectedRoute allowedRoles={['coach']}>
+                        <CoachAttendance />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="coach/results" element={
+                      <ProtectedRoute allowedRoles={['coach']}>
+                        <CoachStudentResults />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="coach/chat" element={
+                      <ProtectedRoute allowedRoles={['coach']}>
+                        <CoachChat />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="admin" element={
+                      <ProtectedRoute allowedRoles={['admin']}>
+                        <AdminProfile />
+                      </ProtectedRoute>
+                    } />
 
-                {/* Admin Management Routes */}
-                <Route path="admin/users" element={
-                  <ProtectedRoute allowedRoles={['admin']}>
-                    <UsersManagement />
-                  </ProtectedRoute>
-                } />
-                <Route path="admin/reservations" element={
-                  <ProtectedRoute allowedRoles={['admin']}>
-                    <Reservations />
-                  </ProtectedRoute>
-                } />
-                <Route path="admin/announcements" element={
-                  <ProtectedRoute allowedRoles={['admin']}>
-                    <Announcements />
-                  </ProtectedRoute>
-                } />
+                    {/* Admin Management Routes */}
+                    <Route path="admin/users" element={
+                      <ProtectedRoute allowedRoles={['admin']}>
+                        <UsersManagement />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="admin/reservations" element={
+                      <ProtectedRoute allowedRoles={['admin']}>
+                        <Reservations />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="admin/announcements" element={
+                      <ProtectedRoute allowedRoles={['admin']}>
+                        <Announcements />
+                      </ProtectedRoute>
+                    } />
 
-                <Route path="courses" element={<Courses />} />
-                <Route path="server-status" element={<ServerStatus />} />
-                <Route path="coaches" element={<Coaches />} />
-                <Route path="cart" element={<CartPage />} />
-                <Route path="checkout" element={<Checkout />} />
+                    <Route path="courses" element={<Courses />} />
+                    <Route path="server-status" element={<ServerStatus />} />
+                    <Route path="coaches" element={<Coaches />} />
+                    <Route path="faq" element={<FAQPage />} />
+                    <Route path="cart" element={<CartPage />} />
+                    <Route path="checkout" element={<Checkout />} />
 
-                {/* Admin Only Routes */}
-                <Route path="students" element={
-                  <ProtectedRoute allowedRoles={['admin', 'coach']}>
-                    <Students />
-                  </ProtectedRoute>
-                } />
-              </Route>
+                    {/* Admin Only Routes */}
+                    <Route path="students" element={
+                      <ProtectedRoute allowedRoles={['admin', 'coach']}>
+                        <Students />
+                      </ProtectedRoute>
+                    } />
+                  </Route>
 
-              <Route path="*" element={<Navigate to="/404" replace />} />
-            </Routes>
-          </BrowserRouter>
-        </AuthProvider>
-      </CartProvider>
-    </ThemeProvider>
+                  <Route path="*" element={<Navigate to="/404" replace />} />
+                </Routes>
+                <CartToast />
+              </NotificationsProvider>
+            </BrowserRouter>
+          </AuthProvider>
+        </CartProvider>
+      </ThemeProvider>
   );
 }
 

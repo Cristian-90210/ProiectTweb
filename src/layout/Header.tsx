@@ -12,11 +12,20 @@ import { useCart } from '../context/CartContext';
 
 const CartIcon: React.FC = () => {
     const { totalItems } = useCart();
+    const { user } = useAuth();
     const navigate = useNavigate();
+
+    const handleCartClick = () => {
+        if (!user) {
+            navigate('/login');
+        } else {
+            navigate('/cart');
+        }
+    };
 
     return (
         <button
-            onClick={() => navigate('/cart')}
+            onClick={handleCartClick}
             className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-host-cyan transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
             title="Coșul meu"
         >
@@ -62,6 +71,11 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onSearchClick }) =>
         }
         navigate(to);
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
     };
 
     // Scroll-based hide/show
@@ -175,7 +189,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, onSearchClick }) =>
                         {user ? (
                             <div className="flex items-center space-x-3 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-full border border-gray-200 dark:border-gray-700">
                                 <span className="text-gray-800 dark:text-white text-sm font-medium">{user.name.split(' ')[0]}</span>
-                                <button onClick={logout} className="text-gray-500 dark:text-gray-400 hover:text-red-500 transition-colors">
+                                <button onClick={handleLogout} className="text-gray-500 dark:text-gray-400 hover:text-red-500 transition-colors">
                                     <LogOut size={16} />
                                 </button>
                             </div>
