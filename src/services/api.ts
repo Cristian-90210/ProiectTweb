@@ -1,8 +1,35 @@
-import type { Student, Course, Coach, AnyUser, Announcement, SwimmingResult, AttendanceRecord, Message, Subscription, CoachScheduleSlot, SpecialOffer, StudentNote } from '../types';
-import { mockStudents, mockCourses, mockCoaches, mockAdmins, mockAnnouncements, mockBookings, mockSwimmingResults, mockAttendance, mockMessages, mockSubscriptions, mockCoachSchedule, mockSpecialOffers, mockStudentNotes } from '../data/mockData';
+import type { Student, Course, Coach, AnyUser, Announcement, SwimmingResult, AttendanceRecord, Message, Subscription, CoachScheduleSlot, SpecialOffer, StudentNote, RecoveryCredit, StudentHealthFlag, ProgressSnapshot, RecoveryRequest } from '../types';
+import { mockStudents, mockCourses, mockCoaches, mockAdmins, mockAnnouncements, mockBookings, mockSwimmingResults, mockAttendance, mockMessages, mockSubscriptions, mockCoachSchedule, mockSpecialOffers, mockStudentNotes, mockRecoveryCredits, mockStudentHealthFlags, mockProgressSnapshots } from '../data/mockData';
 
 // Simulate async API delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const ATTENDANCE_STORAGE_KEY = 'attendance_store_v2';
+const RECOVERY_STORAGE_KEY = 'recovery_store_v1';
+const RECOVERY_REQUEST_STORAGE_KEY = 'recovery_request_store_v1';
+
+const loadFromStorage = <T>(key: string, fallback: T): T => {
+    if (typeof window === 'undefined') return fallback;
+    try {
+        const raw = window.localStorage.getItem(key);
+        if (!raw) return fallback;
+        return JSON.parse(raw) as T;
+    } catch {
+        return fallback;
+    }
+};
+
+const saveToStorage = <T>(key: string, value: T): void => {
+    if (typeof window === 'undefined') return;
+    try {
+        window.localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+        // Ignore storage failures in mock API
+    }
+};
+
+const attendanceStore: AttendanceRecord[] = loadFromStorage(ATTENDANCE_STORAGE_KEY, [...mockAttendance]);
+const recoveryStore: RecoveryCredit[] = loadFromStorage(RECOVERY_STORAGE_KEY, [...mockRecoveryCredits]);
+const recoveryRequestStore: RecoveryRequest[] = loadFromStorage(RECOVERY_REQUEST_STORAGE_KEY, []);
 
 // ── localStorage-backed student persistence ──
 const STUDENTS_KEY = 'students';
@@ -116,18 +143,167 @@ export const announcementService = {
 export const attendanceService = {
     getAll: async (): Promise<AttendanceRecord[]> => {
         await delay(400);
-        return [...mockAttendance];
+        return [...attendanceStore];
     },
     getByStudent: async (studentId: string): Promise<AttendanceRecord[]> => {
         await delay(300);
-        return mockAttendance.filter(a => a.studentId === studentId);
+        return attendanceStore.filter(a => a.studentId === studentId);
     },
     mark: async (record: Omit<AttendanceRecord, 'id'>): Promise<AttendanceRecord> => {
         await delay(400);
-        const newRecord = { ...record, id: 'att' + Math.random().toString(36).substr(2, 6) };
-        console.log('Attendance marked:', newRecord);
-        return newRecord;
+        const existingIndex = attendanceStore.findIndex(
+            a => a.bookingId === record.bookingId && a.studentId === record.studentId && a.date === record.date
+        );
+        const upsertedRecord: AttendanceRecord = existingIndex >= 0
+            ? { ...attendanceStore[existingIndex], ...record }
+            : { ...record, id: 'att' + Math.random().toString(36).substr(2, 6) };
+
+        if (existingIndex >= 0) {
+            attendanceStore[existingIndex] = upsertedRecord;
+        } else {
+            attendanceStore.push(upsertedRecord);
+        }
+
+        // Automatic make-up credit when student has medical absence.
+        if (upsertedRecord.status === 'absent_medical') {
+            const existingCreditIndex = recoveryStore.findIndex(
+                c => c.sourceAttendanceId === upsertedRecord.id && c.studentId === upsertedRecord.studentId
+            );
+            const expiresAt = new Date(new Date(upsertedRecord.date).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+            const credit: RecoveryCredit = {
+                id: existingCreditIndex >= 0 ? recoveryStore[existingCreditIndex].id : 'rc' + Math.random().toString(36).substr(2, 6),
+                studentId: upsertedRecord.studentId,
+                sourceAttendanceId: upsertedRecord.id,
+                status: 'active',
+                expiresAt,
+            };
+            if (existingCreditIndex >= 0) {
+                recoveryStore[existingCreditIndex] = credit;
+            } else {
+                recoveryStore.push(credit);
+            }
+            saveToStorage(RECOVERY_STORAGE_KEY, recoveryStore);
+        }
+
+        saveToStorage(ATTENDANCE_STORAGE_KEY, attendanceStore);
+        console.log('Attendance marked:', upsertedRecord);
+        return upsertedRecord;
+    },
+    confirm: async (recordId: string, coachId: string): Promise<AttendanceRecord> => {
+        await delay(300);
+        const index = attendanceStore.findIndex(a => a.id === recordId);
+        if (index < 0) throw new Error('Attendance record not found');
+
+        const updated: AttendanceRecord = {
+            ...attendanceStore[index],
+            confirmed: true,
+            confirmedBy: coachId,
+            confirmedAt: new Date().toISOString(),
+        };
+        attendanceStore[index] = updated;
+        saveToStorage(ATTENDANCE_STORAGE_KEY, attendanceStore);
+        console.log('Attendance confirmed:', updated);
+        return updated;
+    },
+};
+
+export const recoveryService = {
+    getAll: async (): Promise<RecoveryCredit[]> => {
+        await delay(200);
+        return [...recoveryStore];
+    },
+    getByStudent: async (studentId: string): Promise<RecoveryCredit[]> => {
+        await delay(200);
+        return recoveryStore.filter(c => c.studentId === studentId);
+    },
+    consume: async (creditId: string, sessionId: string): Promise<RecoveryCredit> => {
+        await delay(200);
+        const index = recoveryStore.findIndex(c => c.id === creditId);
+        if (index < 0) throw new Error('Recovery credit not found');
+        const updated: RecoveryCredit = {
+            ...recoveryStore[index],
+            status: 'consumed',
+            consumedSessionId: sessionId,
+        };
+        recoveryStore[index] = updated;
+        saveToStorage(RECOVERY_STORAGE_KEY, recoveryStore);
+        return updated;
     }
+};
+
+export const recoveryRequestService = {
+    getAll: async (): Promise<RecoveryRequest[]> => {
+        await delay(200);
+        return [...recoveryRequestStore];
+    },
+    getByStudent: async (studentId: string): Promise<RecoveryRequest[]> => {
+        await delay(200);
+        return recoveryRequestStore.filter(r => r.studentId === studentId);
+    },
+    create: async (request: Omit<RecoveryRequest, 'id' | 'requestedAt' | 'status'>): Promise<RecoveryRequest> => {
+        await delay(250);
+        const existing = recoveryRequestStore.find(
+            r => r.studentId === request.studentId && r.date === request.date && (r.status === 'pending' || r.status === 'confirmed')
+        );
+        if (existing) return existing;
+
+        const created: RecoveryRequest = {
+            id: 'rr' + Math.random().toString(36).substr(2, 6),
+            studentId: request.studentId,
+            date: request.date,
+            status: 'pending',
+            requestedAt: new Date().toISOString(),
+        };
+        recoveryRequestStore.push(created);
+        saveToStorage(RECOVERY_REQUEST_STORAGE_KEY, recoveryRequestStore);
+        return created;
+    },
+    confirm: async (requestId: string, coachId: string): Promise<RecoveryRequest> => {
+        await delay(250);
+        const index = recoveryRequestStore.findIndex(r => r.id === requestId);
+        if (index < 0) throw new Error('Recovery request not found');
+        const updated: RecoveryRequest = {
+            ...recoveryRequestStore[index],
+            status: 'confirmed',
+            confirmedBy: coachId,
+            confirmedAt: new Date().toISOString(),
+        };
+        recoveryRequestStore[index] = updated;
+        saveToStorage(RECOVERY_REQUEST_STORAGE_KEY, recoveryRequestStore);
+        return updated;
+    },
+};
+
+export const healthService = {
+    getAll: async (): Promise<StudentHealthFlag[]> => {
+        await delay(150);
+        return [...mockStudentHealthFlags];
+    },
+    getByStudent: async (studentId: string): Promise<StudentHealthFlag[]> => {
+        await delay(150);
+        return mockStudentHealthFlags.filter(f => f.studentId === studentId && f.isActive);
+    },
+};
+
+export const progressService = {
+    getLatestByStudent: async (studentId: string): Promise<ProgressSnapshot | undefined> => {
+        await delay(150);
+        return mockProgressSnapshots
+            .filter(p => p.studentId === studentId)
+            .sort((a, b) => new Date(b.recordedAt).getTime() - new Date(a.recordedAt).getTime())[0];
+    },
+    getAllLatest: async (): Promise<ProgressSnapshot[]> => {
+        await delay(150);
+        const byStudent = new Map<string, ProgressSnapshot>();
+        mockProgressSnapshots
+            .sort((a, b) => new Date(b.recordedAt).getTime() - new Date(a.recordedAt).getTime())
+            .forEach(snapshot => {
+                if (!byStudent.has(snapshot.studentId)) {
+                    byStudent.set(snapshot.studentId, snapshot);
+                }
+            });
+        return Array.from(byStudent.values());
+    },
 };
 
 export const resultsService = {

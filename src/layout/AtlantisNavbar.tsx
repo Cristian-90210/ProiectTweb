@@ -17,14 +17,12 @@ import {
     DropdownDivider,
 } from '../components/ui/Dropdown';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
-import { NotificationBell } from '../components/NotificationBell';
 
 import {
     SunIcon,
     MoonIcon,
     MagnifyingGlassIcon,
     ShoppingCartIcon,
-    ChatBubbleOvalLeftIcon,
     Bars3Icon,
     UserCircleIcon,
     CreditCardIcon,
@@ -45,9 +43,9 @@ import {
    ══════════════════════════════════════════════════════════════ */
 
 const Navbar: React.FC<{ children: React.ReactNode; className?: string }> = ({
-                                                                                 children,
-                                                                                 className,
-                                                                             }) => (
+    children,
+    className,
+}) => (
     <nav className={clsx('container mx-auto px-6 py-4', className)}>
         <div className="relative flex items-center">{children}</div>
     </nav>
@@ -59,6 +57,8 @@ const NavbarSection: React.FC<{
 }> = ({ children, className }) => (
     <div className={clsx('flex items-center', className)}>{children}</div>
 );
+
+const NavbarSpacer: React.FC = () => <div className="flex-1" />;
 
 const NavbarItem: React.FC<{
     label: string;
@@ -144,12 +144,6 @@ const UserAvatarDropdown: React.FC = () => {
 
     const go = (path: string) => {
         navigate(path);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    const handleLogout = () => {
-        logout();
-        navigate('/');
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -263,7 +257,7 @@ const UserAvatarDropdown: React.FC = () => {
                 {roleItems}
 
                 <DropdownDivider />
-                <DropdownItem onClick={handleLogout} destructive>
+                <DropdownItem onClick={logout} destructive>
                     <ArrowRightStartOnRectangleIcon className="w-4 h-4" />
                     {t('header.logout', { defaultValue: 'Sign out' })}
                 </DropdownItem>
@@ -288,7 +282,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
     const navigate = useNavigate();
     const location = useLocation();
 
-    /* ── Scroll-based hide / show ── */
+    /* ── Scroll-based hide / show ─────────────────────── */
     const [hidden, setHidden] = React.useState(false);
     const lastScrollY = React.useRef(0);
 
@@ -302,7 +296,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    /* ── Center nav items (role-based) ── */
+    /* ── Center nav items (role-based) ────────────────── */
     const navItems = user
         ? [
             ...(user.role === 'student'
@@ -315,7 +309,6 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
             ...(user.role === 'coach'
                 ? [
                     { label: t('header.dashboard'), to: '/coach' },
-                    { label: t('header.courses'), to: '/courses' },
                     { label: t('header.students'), to: '/students' },
                 ]
                 : []),
@@ -344,25 +337,29 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
         <header
             className={clsx(
                 'fixed inset-x-0 top-0 z-40 transition-transform duration-300 bg-white dark:bg-gray-900',
-                hidden ? '-translate-y-full' : 'translate-y-0'
+                hidden ? '-translate-y-full' : 'translate-y-0',
             )}
         >
             <Navbar>
-                {/* ── LEFT: Logo ── */}
+                {/* ── LEFT: Logo ──────────────────────────────── */}
                 <NavbarSection className="flex-1 min-w-0 cursor-pointer">
-                    <div className="flex items-center" onClick={() => navigateAndScroll('/')}>
+                    <div
+                        className="flex items-center"
+                        onClick={() => navigateAndScroll('/')}
+                    >
                         <img
                             src="https://atlantisswim.md/wp-content/uploads/2025/08/cropped-asat-03-scaled-1-e1755890850322.png"
                             alt="Atlantis SwimSchool"
                             className="h-10 w-10 mr-2 object-contain"
                         />
                         <span className="text-2xl font-extrabold text-gray-900 dark:text-white tracking-wider">
-                            ATLANTIS <span className="text-host-cyan">SWIMSCHOOL</span>
+                            ATLANTIS{' '}
+                            <span className="text-host-cyan">SWIMSCHOOL</span>
                         </span>
                     </div>
                 </NavbarSection>
 
-                {/* ── CENTER: Nav Links ── */}
+                {/* ── CENTER: Nav Links (absolute-centered, desktop only) ── */}
                 <NavbarSection className="hidden lg:flex absolute inset-x-0 justify-center pointer-events-none">
                     <div className="flex items-center space-x-10 pointer-events-auto">
                         {navItems.map((item) => (
@@ -376,7 +373,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
                     </div>
                 </NavbarSection>
 
-                {/* ── RIGHT: Actions (desktop) ── */}
+                {/* ── RIGHT: Actions (desktop) ────────────────── */}
                 <NavbarSection className="hidden lg:flex flex-1 items-center justify-end space-x-2">
                     {/* Search */}
                     <button
@@ -386,31 +383,25 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
                         <MagnifyingGlassIcon className="w-5 h-5" />
                     </button>
 
-                    {/* Cart / Chat */}
-                    {user?.role === 'coach' ? (
-                        <button
-                            onClick={() => navigateAndScroll('/coach/chat')}
-                            className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-host-cyan transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-                            title="Mesaje"
-                        >
-                            <ChatBubbleOvalLeftIcon className="w-5 h-5" />
-                        </button>
-                    ) : (
-                        <CartBadge />
-                    )}
+                    {/* Cart */}
+                    {user?.role !== 'coach' && <CartBadge />}
 
-                    {user && <NotificationBell />}
+                    {/* Language Switcher */}
                     <LanguageSwitcher />
 
-                    {/* Theme Toggle */}
+                    {/* Dark Mode Toggle */}
                     <button
                         onClick={toggleTheme}
                         className="p-2 text-gray-600 dark:text-gray-300 hover:text-host-cyan transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
-                        {theme === 'light' ? <MoonIcon className="w-5 h-5" /> : <SunIcon className="w-5 h-5" />}
+                        {theme === 'light' ? (
+                            <MoonIcon className="w-5 h-5" />
+                        ) : (
+                            <SunIcon className="w-5 h-5" />
+                        )}
                     </button>
 
-                    {/* Avatar / Login */}
+                    {/* User Avatar / Login */}
                     {user ? (
                         <UserAvatarDropdown />
                     ) : (
@@ -424,7 +415,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
                     )}
                 </NavbarSection>
 
-                {/* ── MOBILE Actions ── */}
+                {/* ── MOBILE: Menu + Search buttons ────────────── */}
                 <NavbarSection className="lg:hidden flex items-center space-x-4">
                     <button
                         onClick={onSearchClick}

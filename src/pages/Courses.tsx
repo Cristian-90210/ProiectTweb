@@ -6,25 +6,10 @@ import { CartToast } from '../components/CartToast';
 import { subscriptionPlans } from '../data/mockData';
 import { Clock, Tag, Zap, Car, User, ShoppingCart, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
 
 export const Courses: React.FC = () => {
     const { addItem, items } = useCart();
-    const { user } = useAuth();
     const navigate = useNavigate();
-
-    const handleAddToCart = (plan: typeof subscriptionPlans[0]) => {
-        if (!user) {
-            navigate('/login');
-            return;
-        }
-        addItem({
-            id: plan.id,
-            name: plan.name,
-            price: plan.price,
-            discountPrice: plan.discountPrice ?? undefined,
-        });
-    };
     const categoryLabels: Record<string, { label: string; icon: React.ElementType; color: string }> = {
         standard: { label: 'Standard', icon: Tag, color: 'text-blue-400' },
         pro: { label: 'Pro', icon: Zap, color: 'text-purple-400' },
@@ -52,7 +37,8 @@ export const Courses: React.FC = () => {
                             return (
                                 <div
                                     key={plan.id}
-                                    className="relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                                    onClick={() => navigate(`/courses/${plan.id}`)}
+                                    className="relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
                                 >
                                     {/* Category badge */}
                                     <div className={`inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 bg-gray-100 dark:bg-gray-700 ${cat.color}`}>
@@ -102,7 +88,15 @@ export const Courses: React.FC = () => {
 
                                     {/* Add to cart button */}
                                     <CTAButton
-                                        onClick={() => handleAddToCart(plan)}
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            addItem({
+                                                id: plan.id,
+                                                name: plan.name,
+                                                price: plan.price,
+                                                discountPrice: plan.discountPrice ?? undefined,
+                                            });
+                                        }}
                                         style={items.some(i => i.id === plan.id) ? {
                                             borderRadius: '9999px',
                                             background: 'linear-gradient(145deg, #22c55e 0%, #16a34a 100%)',
