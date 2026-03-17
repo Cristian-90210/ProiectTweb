@@ -1,14 +1,17 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PageHeader } from '../components/PageHeader';
 import { CTAButton } from '../components/CTAButton';
 import { CartToast } from '../components/CartToast';
 import { subscriptionPlans } from '../data/mockData';
 import { Clock, Tag, Zap, Car, User, ShoppingCart, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 export const Courses: React.FC = () => {
     const { addItem, items } = useCart();
+    const { isAuthenticated } = useAuth();
+    const location = useLocation();
     const navigate = useNavigate();
     const categoryLabels: Record<string, { label: string; icon: React.ElementType; color: string }> = {
         standard: { label: 'Standard', icon: Tag, color: 'text-blue-400' },
@@ -90,6 +93,12 @@ export const Courses: React.FC = () => {
                                     <CTAButton
                                         onClick={(event) => {
                                             event.stopPropagation();
+
+                                            if (!isAuthenticated) {
+                                                navigate('/login', { state: { from: location } });
+                                                return;
+                                            }
+
                                             addItem({
                                                 id: plan.id,
                                                 name: plan.name,
