@@ -181,6 +181,10 @@ const UserAvatarDropdown: React.FC = () => {
                 <TrophyIcon className="w-4 h-4" />
                 {t('dropdown.results', { defaultValue: 'Results' })}
             </DropdownItem>
+            <DropdownItem onClick={() => go('/student/settings')}>
+                <Cog6ToothIcon className="w-4 h-4" />
+                {t('dropdown.settings', { defaultValue: 'Settings' })}
+            </DropdownItem>
         </>
     );
 
@@ -202,6 +206,10 @@ const UserAvatarDropdown: React.FC = () => {
             <DropdownItem onClick={() => go('/coach/results')}>
                 <TrophyIcon className="w-4 h-4" />
                 {t('dropdown.student_results', { defaultValue: 'Student Results' })}
+            </DropdownItem>
+            <DropdownItem onClick={() => go('/coach/settings')}>
+                <Cog6ToothIcon className="w-4 h-4" />
+                {t('dropdown.settings', { defaultValue: 'Settings' })}
             </DropdownItem>
         </>
     );

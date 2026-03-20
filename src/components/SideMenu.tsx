@@ -20,6 +20,7 @@ import {
     Languages,
     Sun,
     Moon,
+    Settings,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
@@ -51,6 +52,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, onSearchCli
                 { to: '/student/subscription', label: t('dropdown.my_subscription', { defaultValue: 'My Subscription' }), icon: CreditCard },
                 { to: '/student/schedule', label: t('dropdown.schedule', { defaultValue: 'Schedule' }), icon: Calendar },
                 { to: '/student/results', label: t('dropdown.results', { defaultValue: 'Results' }), icon: Trophy },
+                { to: '/student/settings', label: t('dropdown.settings', { defaultValue: 'Settings' }), icon: Settings },
             ] : []),
             ...(user.role === 'coach' ? [
                 { to: '/coach', label: t('header.dashboard'), icon: LayoutDashboard },
@@ -58,6 +60,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, onSearchCli
                 { to: '/coach/schedule', label: t('dropdown.training_schedule', { defaultValue: 'Training Schedule' }), icon: Calendar },
                 { to: '/coach/attendance', label: t('dropdown.attendance', { defaultValue: 'Attendance' }), icon: ClipboardList },
                 { to: '/coach/results', label: t('dropdown.student_results', { defaultValue: 'Student Results' }), icon: Trophy },
+                { to: '/coach/settings', label: t('dropdown.settings', { defaultValue: 'Settings' }), icon: Settings },
             ] : []),
             ...(user.role === 'admin' ? [
                 { to: '/admin', label: t('header.dashboard'), icon: LayoutDashboard },

@@ -20,12 +20,14 @@ import { StudentProfile } from './pages/student/StudentProfile';
 import { StudentSubscription } from './pages/student/StudentSubscription';
 import { StudentSchedule } from './pages/student/StudentSchedule';
 import { StudentResults } from './pages/student/StudentResults';
+import { StudentSettings } from './pages/student/StudentSettings';
 import { CoachDashboard } from './pages/CoachDashboard';
 import { CoachProfile } from './pages/coach/CoachProfile';
 import { CoachTrainingSchedule } from './pages/coach/CoachTrainingSchedule';
 import { CoachAttendance } from './pages/coach/CoachAttendance';
 import { CoachStudentResults } from './pages/coach/CoachStudentResults';
 import { CoachChat } from './pages/coach/CoachChat';
+import { CoachSettings } from './pages/coach/CoachSettings';
 import { AdminProfile } from './pages/AdminProfile';
 import { UsersManagement } from './pages/admin/Users';
 import { Reservations } from './pages/admin/Reservations';
@@ -98,6 +100,11 @@ function App() {
                         <StudentResults />
                       </ProtectedRoute>
                     } />
+                    <Route path="student/settings" element={
+                      <ProtectedRoute allowedRoles={['student']}>
+                        <StudentSettings />
+                      </ProtectedRoute>
+                    } />
                     <Route path="coach" element={
                       <ProtectedRoute allowedRoles={['coach']}>
                         <CoachDashboard />
@@ -126,6 +133,11 @@ function App() {
                     <Route path="coach/chat" element={
                       <ProtectedRoute allowedRoles={['coach']}>
                         <CoachChat />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="coach/settings" element={
+                      <ProtectedRoute allowedRoles={['coach']}>
+                        <CoachSettings />
                       </ProtectedRoute>
                     } />
                     <Route path="admin" element={
