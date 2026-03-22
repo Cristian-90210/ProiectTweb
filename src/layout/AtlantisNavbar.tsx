@@ -22,7 +22,7 @@ import { NotificationBell } from '../components/NotificationBell';
 import {
     SunIcon,
     MoonIcon,
-    MagnifyingGlassIcon,
+
     ShoppingCartIcon,
     ChatBubbleOvalLeftIcon,
     Bars3Icon,
@@ -138,6 +138,7 @@ const CartBadge: React.FC = () => {
 const UserAvatarDropdown: React.FC = () => {
     const { user, logout } = useAuth();
     const { t } = useTranslation();
+    const { clearCart } = useCart();
     const navigate = useNavigate();
 
     if (!user) return null;
@@ -148,6 +149,7 @@ const UserAvatarDropdown: React.FC = () => {
     };
 
     const handleLogout = () => {
+        clearCart();
         logout();
         navigate('/');
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -179,6 +181,10 @@ const UserAvatarDropdown: React.FC = () => {
                 <TrophyIcon className="w-4 h-4" />
                 {t('dropdown.results', { defaultValue: 'Results' })}
             </DropdownItem>
+            <DropdownItem onClick={() => go('/student/settings')}>
+                <Cog6ToothIcon className="w-4 h-4" />
+                {t('dropdown.settings', { defaultValue: 'Settings' })}
+            </DropdownItem>
         </>
     );
 
@@ -200,6 +206,10 @@ const UserAvatarDropdown: React.FC = () => {
             <DropdownItem onClick={() => go('/coach/results')}>
                 <TrophyIcon className="w-4 h-4" />
                 {t('dropdown.student_results', { defaultValue: 'Student Results' })}
+            </DropdownItem>
+            <DropdownItem onClick={() => go('/coach/settings')}>
+                <Cog6ToothIcon className="w-4 h-4" />
+                {t('dropdown.settings', { defaultValue: 'Settings' })}
             </DropdownItem>
         </>
     );
@@ -278,10 +288,10 @@ const UserAvatarDropdown: React.FC = () => {
 
 interface AtlantisNavbarProps {
     onMenuClick: () => void;
-    onSearchClick: () => void;
+
 }
 
-export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onSearchClick }) => {
+export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick }) => {
     const { t } = useTranslation();
     const { user } = useAuth();
     const { theme, toggleTheme } = useTheme();
@@ -309,12 +319,14 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
                 ? [
                     { label: t('header.dashboard'), to: '/student' },
                     { label: t('header.courses'), to: '/courses' },
+                    { label: t('header.attendance', { defaultValue: 'Prezență' }), to: '/prezenta' },
                     { label: t('header.our_team'), to: '/coaches' },
                 ]
                 : []),
             ...(user.role === 'coach'
                 ? [
                     { label: t('header.dashboard'), to: '/coach' },
+                    { label: t('header.courses'), to: '/courses' },
                     { label: t('header.students'), to: '/students' },
                 ]
                 : []),
@@ -377,13 +389,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
 
                 {/* ── RIGHT: Actions (desktop) ── */}
                 <NavbarSection className="hidden lg:flex flex-1 items-center justify-end space-x-2">
-                    {/* Search */}
-                    <button
-                        onClick={onSearchClick}
-                        className="p-2 text-gray-600 dark:text-gray-300 hover:text-host-cyan transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-                    >
-                        <MagnifyingGlassIcon className="w-5 h-5" />
-                    </button>
+
 
                     {/* Cart / Chat */}
                     {user?.role === 'coach' ? (
@@ -394,6 +400,17 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
                         >
                             <ChatBubbleOvalLeftIcon className="w-5 h-5" />
                         </button>
+                    ) : user?.role === 'student' ? (
+                        <div className="flex items-center space-x-2">
+                            <button
+                                onClick={() => navigateAndScroll('/student/chat')}
+                                className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-host-cyan transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                                title="Mesaje"
+                            >
+                                <ChatBubbleOvalLeftIcon className="w-5 h-5" />
+                            </button>
+                            <CartBadge />
+                        </div>
                     ) : (
                         <CartBadge />
                     )}
@@ -425,12 +442,6 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick, onS
 
                 {/* ── MOBILE Actions ── */}
                 <NavbarSection className="lg:hidden flex items-center space-x-4">
-                    <button
-                        onClick={onSearchClick}
-                        className="text-gray-700 dark:text-white hover:text-host-cyan transition-colors"
-                    >
-                        <MagnifyingGlassIcon className="w-6 h-6" />
-                    </button>
                     <button
                         onClick={onMenuClick}
                         className="text-gray-700 dark:text-white hover:text-host-cyan transition-colors"
