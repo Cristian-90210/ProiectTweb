@@ -157,7 +157,7 @@ export const Landing: React.FC = () => {
                                                 event.stopPropagation();
                                                 navigate('/login');
                                             }}>
-                                                <span>ADAUGĂ ÎN COȘ</span>
+                                                <span>{t('landing.subscriptions.add_to_cart')}</span>
                                             </CTAButton>
                                         </div>
                                     </div>
