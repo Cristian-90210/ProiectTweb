@@ -21,12 +21,11 @@ namespace AtlantisSwim.Api.Controller
 
 
             var data = _userReg.UserRegDataValidation(uRegData);
-            if (data.IsSuccess)
-            {
-                return Ok(data.Message);
-            }
 
-            return Ok(data.Message);
+            if (data.IsSuccess)
+                return Ok(data);
+
+            return BadRequest(data);
         }
     }
 }
