@@ -342,7 +342,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick }) =
             { label: t('header.home'), to: '/' },
             { label: t('header.courses'), to: '/courses' },
             { label: t('header.our_team'), to: '/coaches' },
-            { label: t('header.faq'), to: '#faq-section' },
+            { label: t('header.faq'), to: '/faq' },
         ];
 
     const navigateAndScroll = (to: string) => {
@@ -353,7 +353,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick }) =
     return (
         <header
             className={clsx(
-                'fixed inset-x-0 top-0 z-40 transition-transform duration-300 bg-white dark:bg-gray-900',
+                'fixed inset-x-0 top-0 z-40 transition-transform duration-300 bg-white dark:bg-[#0b1220]',
                 hidden ? '-translate-y-full' : 'translate-y-0'
             )}
         >

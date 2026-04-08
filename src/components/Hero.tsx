@@ -18,7 +18,7 @@ export const Hero: React.FC = () => {
 
             <div className="container mx-auto px-6 relative z-10 text-center">
                 {/* Main Heading */}
-                <div className="mb-8 animate-in slide-in-from-bottom-5 duration-700 fade-in">
+                <div className="mb-8 animate-in slide-in-from-bottom-5 duration-700">
                     <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tight mb-4 drop-shadow-sm">
                         {t('hero.title')}
                         <br />
@@ -32,7 +32,7 @@ export const Hero: React.FC = () => {
                 </div>
 
                 {/* Legend container - Restored wrapper */}
-                <div className="max-w-3xl mx-auto animate-in slide-in-from-bottom-8 duration-1000 fade-in fill-mode-backwards delay-200">
+                <div className="max-w-3xl mx-auto animate-in slide-in-from-bottom-8 duration-1000">
                     {/* Legend */}
                     <div className="flex flex-wrap justify-center gap-6 text-sm text-blue-200/80 font-medium">
                         <div className="flex items-center space-x-2 animate-float">

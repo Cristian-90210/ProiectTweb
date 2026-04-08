@@ -75,7 +75,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
             { to: '/', label: t('header.home'), icon: Home },
             { to: '/courses', label: t('header.courses'), icon: BookOpen },
             { to: '/coaches', label: t('header.our_team'), icon: User },
-            { to: '#faq-section', label: t('header.faq'), icon: BookOpen },
+            { to: '/faq', label: t('header.faq'), icon: BookOpen },
         ];
 
     const actionButtonClassName =
