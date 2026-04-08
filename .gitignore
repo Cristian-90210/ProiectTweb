@@ -106,6 +106,14 @@ launchSettings.json
 *.DotSettings
 
 #################################
+# AI tool settings (pot contine credentiale)
+#################################
+.claude/
+.qwen/
+*/.claude/
+**/.claude/
+
+#################################
 # Misc
 #################################
 .DS_Store

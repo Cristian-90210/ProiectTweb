@@ -1,9 +1,22 @@
+using AtlantisSwim.BusinessLayer.Interfaces;
+using AtlantisSwim.BusinessLayer.Structure;
+using AtlantisSwim.DataAccess;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// connection string setup
-AtlantisSwim.DataAccess.DbSession.ConnectionString =
-    builder.Configuration.GetConnectionString("DefaultConnection");
+// ── Connection string ─────────────────────────────────────────────────────────
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found in configuration.");
 
+// ── EF Core — register DbSession via dependency injection ─────────────────────
+builder.Services.AddDbContext<DbSession>(options =>
+    options.UseNpgsql(connectionString));
+
+// ── Business layer services ───────────────────────────────────────────────────
+builder.Services.AddScoped<IStudentService, StudentService>();
+
+// ── CORS ──────────────────────────────────────────────────────────────────────
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
