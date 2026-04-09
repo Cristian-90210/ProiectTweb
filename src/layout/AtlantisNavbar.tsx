@@ -119,7 +119,6 @@ const CartBadge: React.FC = () => {
         <button
             onClick={() => navigate('/cart')}
             className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-host-cyan transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-            title="Coșul meu"
         >
             <ShoppingCartIcon className="w-5 h-5" />
             {totalItems > 0 && (
@@ -164,78 +163,78 @@ const UserAvatarDropdown: React.FC = () => {
 
     const studentItems = (
         <>
-            <DropdownLabel>{t('header.student', { defaultValue: 'Student' })}</DropdownLabel>
+            <DropdownLabel>{t('header.student')}</DropdownLabel>
             <DropdownItem onClick={() => go('/student/profile')}>
                 <UserCircleIcon className="w-4 h-4" />
-                {t('dropdown.my_profile', { defaultValue: 'My Profile' })}
+                {t('dropdown.my_profile')}
             </DropdownItem>
             <DropdownItem onClick={() => go('/student/subscription')}>
                 <CreditCardIcon className="w-4 h-4" />
-                {t('dropdown.my_subscription', { defaultValue: 'My Subscription' })}
+                {t('dropdown.my_subscription')}
             </DropdownItem>
             <DropdownItem onClick={() => go('/student/schedule')}>
                 <CalendarDaysIcon className="w-4 h-4" />
-                {t('dropdown.schedule', { defaultValue: 'Schedule' })}
+                {t('dropdown.schedule')}
             </DropdownItem>
             <DropdownItem onClick={() => go('/student/results')}>
                 <TrophyIcon className="w-4 h-4" />
-                {t('dropdown.results', { defaultValue: 'Results' })}
+                {t('dropdown.results')}
             </DropdownItem>
             <DropdownItem onClick={() => go('/student/settings')}>
                 <Cog6ToothIcon className="w-4 h-4" />
-                {t('dropdown.settings', { defaultValue: 'Settings' })}
+                {t('dropdown.settings')}
             </DropdownItem>
         </>
     );
 
     const coachItems = (
         <>
-            <DropdownLabel>{t('header.coach', { defaultValue: 'Coach' })}</DropdownLabel>
+            <DropdownLabel>{t('header.coach')}</DropdownLabel>
             <DropdownItem onClick={() => go('/coach/profile')}>
                 <UserCircleIcon className="w-4 h-4" />
-                {t('dropdown.my_profile', { defaultValue: 'My Profile' })}
+                {t('dropdown.my_profile')}
             </DropdownItem>
             <DropdownItem onClick={() => go('/coach/schedule')}>
                 <CalendarDaysIcon className="w-4 h-4" />
-                {t('dropdown.training_schedule', { defaultValue: 'Training Schedule' })}
+                {t('dropdown.training_schedule')}
             </DropdownItem>
             <DropdownItem onClick={() => go('/coach/attendance')}>
                 <ClipboardDocumentListIcon className="w-4 h-4" />
-                {t('dropdown.attendance', { defaultValue: 'Attendance' })}
+                {t('dropdown.attendance')}
             </DropdownItem>
             <DropdownItem onClick={() => go('/coach/results')}>
                 <TrophyIcon className="w-4 h-4" />
-                {t('dropdown.student_results', { defaultValue: 'Student Results' })}
+                {t('dropdown.student_results')}
             </DropdownItem>
             <DropdownItem onClick={() => go('/coach/settings')}>
                 <Cog6ToothIcon className="w-4 h-4" />
-                {t('dropdown.settings', { defaultValue: 'Settings' })}
+                {t('dropdown.settings')}
             </DropdownItem>
         </>
     );
 
     const adminItems = (
         <>
-            <DropdownLabel>{t('header.admin', { defaultValue: 'Admin' })}</DropdownLabel>
+            <DropdownLabel>{t('header.admin')}</DropdownLabel>
             <DropdownItem onClick={() => go('/admin')}>
                 <AcademicCapIcon className="w-4 h-4" />
-                {t('dropdown.admin_dashboard', { defaultValue: 'Admin Dashboard' })}
+                {t('dropdown.admin_dashboard')}
             </DropdownItem>
             <DropdownItem onClick={() => go('/admin/users')}>
                 <UserGroupIcon className="w-4 h-4" />
-                {t('dropdown.manage_users', { defaultValue: 'Manage Users' })}
+                {t('dropdown.manage_users')}
             </DropdownItem>
             <DropdownItem onClick={() => go('/admin/reservations')}>
                 <BookOpenIcon className="w-4 h-4" />
-                {t('dropdown.reservations', { defaultValue: 'Reservations' })}
+                {t('dropdown.reservations')}
             </DropdownItem>
             <DropdownItem onClick={() => go('/admin')}>
                 <ChartBarIcon className="w-4 h-4" />
-                {t('dropdown.reports', { defaultValue: 'Reports / Statistics' })}
+                {t('dropdown.reports')}
             </DropdownItem>
             <DropdownItem onClick={() => go('/admin')}>
                 <Cog6ToothIcon className="w-4 h-4" />
-                {t('dropdown.system_settings', { defaultValue: 'System Settings' })}
+                {t('dropdown.system_settings')}
             </DropdownItem>
         </>
     );
@@ -275,7 +274,7 @@ const UserAvatarDropdown: React.FC = () => {
                 <DropdownDivider />
                 <DropdownItem onClick={handleLogout} destructive>
                     <ArrowRightStartOnRectangleIcon className="w-4 h-4" />
-                    {t('header.logout', { defaultValue: 'Sign out' })}
+                    {t('header.logout')}
                 </DropdownItem>
             </DropdownMenu>
         </Dropdown>
@@ -319,7 +318,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick }) =
                 ? [
                     { label: t('header.dashboard'), to: '/student' },
                     { label: t('header.courses'), to: '/courses' },
-                    { label: t('header.attendance', { defaultValue: 'Prezență' }), to: '/prezenta' },
+                    { label: t('header.attendance'), to: '/prezenta' },
                     { label: t('header.our_team'), to: '/coaches' },
                 ]
                 : []),
@@ -354,7 +353,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick }) =
     return (
         <header
             className={clsx(
-                'fixed inset-x-0 top-0 z-40 transition-transform duration-300 bg-white dark:bg-gray-900',
+                'fixed inset-x-0 top-0 z-40 transition-transform duration-300 bg-white dark:bg-[#0b1220]',
                 hidden ? '-translate-y-full' : 'translate-y-0'
             )}
         >
@@ -396,7 +395,6 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick }) =
                         <button
                             onClick={() => navigateAndScroll('/coach/chat')}
                             className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-host-cyan transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-                            title="Mesaje"
                         >
                             <ChatBubbleOvalLeftIcon className="w-5 h-5" />
                         </button>
@@ -405,7 +403,6 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick }) =
                             <button
                                 onClick={() => navigateAndScroll('/student/chat')}
                                 className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-host-cyan transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-                                title="Mesaje"
                             >
                                 <ChatBubbleOvalLeftIcon className="w-5 h-5" />
                             </button>
@@ -435,7 +432,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick }) =
                             className="flex items-center gap-2 px-6 py-2 rounded-full bg-host-cyan hover:bg-cyan-500 text-white font-bold text-sm uppercase tracking-wide shadow-sm hover:shadow-md transition-all duration-200 border-none"
                         >
                             <ArrowRightEndOnRectangleIcon className="w-4 h-4" />
-                            {t('header.connect', { defaultValue: 'Conectare' })}
+                            {t('header.connect')}
                         </button>
                     )}
                 </NavbarSection>
