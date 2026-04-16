@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { UserRole } from '../types';
 import {
     LayoutDashboard,
     Users,
@@ -19,7 +20,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     const { user, logout } = useAuth();
-    const isAdmin = user?.role === 'admin';
+    const isAdmin = user?.role === UserRole.Admin;
 
     const links = [
         { to: '/', icon: LayoutDashboard, label: 'Dashboard' },

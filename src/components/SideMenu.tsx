@@ -22,6 +22,7 @@ import {
     Settings,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { UserRole, getRoleLabel } from '../types';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
 import { Logo } from '../components/Logo';
@@ -44,7 +45,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
     // Authenticated: role-specific dashboard + relevant links
     const links = user
         ? [
-            ...(user.role === 'student' ? [
+            ...(user.role === UserRole.Student ? [
                 { to: '/student', label: t('header.dashboard'), icon: LayoutDashboard },
                 { to: '/prezenta', label: t('header.attendance', { defaultValue: 'Prezență' }), icon: ClipboardList },
                 { to: '/student/profile', label: t('dropdown.my_profile', { defaultValue: 'My Profile' }), icon: UserCircle },
@@ -53,7 +54,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                 { to: '/student/results', label: t('dropdown.results', { defaultValue: 'Results' }), icon: Trophy },
                 { to: '/student/settings', label: t('dropdown.settings', { defaultValue: 'Settings' }), icon: Settings },
             ] : []),
-            ...(user.role === 'coach' ? [
+            ...(user.role === UserRole.Coach ? [
                 { to: '/coach', label: t('header.dashboard'), icon: LayoutDashboard },
                 { to: '/coach/profile', label: t('dropdown.my_profile', { defaultValue: 'My Profile' }), icon: UserCircle },
                 { to: '/coach/schedule', label: t('dropdown.training_schedule', { defaultValue: 'Training Schedule' }), icon: Calendar },
@@ -61,7 +62,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                 { to: '/coach/results', label: t('dropdown.student_results', { defaultValue: 'Student Results' }), icon: Trophy },
                 { to: '/coach/settings', label: t('dropdown.settings', { defaultValue: 'Settings' }), icon: Settings },
             ] : []),
-            ...(user.role === 'admin' ? [
+            ...(user.role === UserRole.Admin ? [
                 { to: '/admin', label: t('header.dashboard'), icon: LayoutDashboard },
                 { to: '/admin/users', label: t('dropdown.manage_users', { defaultValue: 'Manage Users' }), icon: Users },
                 { to: '/admin/reservations', label: t('dropdown.reservations', { defaultValue: 'Reservations' }), icon: BookOpen },
@@ -148,7 +149,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                                 <p className="truncate text-sm font-bold text-white">{user.name}</p>
                                 <p className="truncate text-xs text-slate-300">{user.email}</p>
                                 <span className="mt-1 inline-block rounded-full bg-cyan-400/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-cyan-200">
-                                    {user.role}
+                                    {getRoleLabel(user.role)}
                                 </span>
                             </div>
                         </div>

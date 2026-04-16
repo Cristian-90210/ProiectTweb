@@ -3,6 +3,7 @@ import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
 import { PageHeader } from '../../components/PageHeader';
 import { Table, TableRow } from '../../components/TableRow';
+import { UserRole, getRoleLabel } from '../../types';
 import type { AnyUser } from '../../types';
 import { userService } from '../../services/api';
 import { Search, CheckCircle, XCircle, Download } from 'lucide-react';
@@ -11,7 +12,7 @@ import { exportToCSV } from '../../utils/csvExport';
 export const UsersManagement: React.FC = () => {
     const [users, setUsers] = useState<AnyUser[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [filterRole, setFilterRole] = useState<'all' | 'student' | 'coach' | 'admin'>('all');
+    const [filterRole, setFilterRole] = useState<'all' | UserRole>('all');
 
     useEffect(() => {
         loadUsers();
@@ -55,16 +56,16 @@ export const UsersManagement: React.FC = () => {
                     {/* Filters */}
                     <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex flex-wrap gap-4 items-center justify-between">
                         <div className="flex space-x-2">
-                            {['all', 'student', 'coach', 'admin'].map(role => (
+                            {(['all', UserRole.Student, UserRole.Coach, UserRole.Admin] as const).map(role => (
                                 <button
                                     key={role}
-                                    onClick={() => setFilterRole(role as any)}
+                                    onClick={() => setFilterRole(role)}
                                     className={`px-4 py-2 rounded-full text-sm font-bold uppercase transition-colors ${filterRole === role
                                         ? 'bg-host-cyan text-white shadow-md'
                                         : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600'
                                     }`}
                                 >
-                                    {role}
+                                    {role === 'all' ? 'Toți' : getRoleLabel(role)}
                                 </button>
                             ))}
                         </div>
@@ -119,9 +120,9 @@ export const UsersManagement: React.FC = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium uppercase
-                                            ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' :
-                                            user.role === 'coach' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
-                                            {user.role}
+                                            ${user.role === UserRole.Admin   ? 'bg-purple-100 text-purple-800' :
+                                              user.role === UserRole.Coach   ? 'bg-blue-100 text-blue-800'   : 'bg-green-100 text-green-800'}`}>
+                                            {getRoleLabel(user.role)}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-gray-500 dark:text-gray-400">{user.email}</td>

@@ -1,5 +1,6 @@
 using AtlantisSwim.BusinessLayer.Core;
 using AtlantisSwim.BusinessLayer.Interfaces;
+using AtlantisSwim.Domain.Entities.User;
 using AtlantisSwim.Domain.Models.Responces;
 using AtlantisSwim.Domain.Models.User;
 
@@ -11,25 +12,32 @@ namespace AtlantisSwim.BusinessLayer.Structure
 
         public ActionResponce UserLoginDataValidation(UserLoginDto udata)
         {
-            var response = new ActionResponce();
+            var user = UserLoginDataValidationExecution(udata);
 
-            var isValid = UserLoginDataValidationExecution(udata);
+            if (user == null)
+                return new ActionResponce { IsSuccess = false, Message = "Invalid credentials" };
 
-            if (isValid)
+            var token = UserTokenGeneration(udata);
+
+            return new ActionResponce
             {
-                var token = UserTokenGeneration(udata);
-
-                response.IsSuccess = true;
-                response.Data = token;
-                response.Message = "Login successful";
-            }
-            else
-            {
-                response.IsSuccess = false;
-                response.Message = "Invalid credentials";
-            }
-
-            return response;
+                IsSuccess = true,
+                Message   = "Login successful",
+                Data      = new UserAuthResponseDto
+                {
+                    Id       = user.Id,
+                    UserName = user.UserName,
+                    Email    = user.Email,
+                    RoleId   = (int)user.Role,
+                    RoleName = user.Role switch
+                    {
+                        UserRole.Student => "Elev",
+                        UserRole.Coach   => "Antrenor",
+                        UserRole.Admin   => "Admin",
+                        _                => user.Role.ToString()
+                    }
+                }
+            };
         }
     }
 }
