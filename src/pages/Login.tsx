@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Waves, ChevronDown, ChevronUp } from 'lucide-react';
 
-import { UserRole, getRoleLabel, getRoleKey } from '../types';
+import { UserRole, getRoleKey } from '../types';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';
 

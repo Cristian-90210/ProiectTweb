@@ -343,7 +343,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick }) =
             { label: t('header.home'), to: '/' },
             { label: t('header.courses'), to: '/courses' },
             { label: t('header.our_team'), to: '/coaches' },
-            { label: t('header.faq'), to: '/faq' },
+            { label: t('header.faq'), to: '#faq' },
         ];
 
     const navigateAndScroll = (to: string) => {

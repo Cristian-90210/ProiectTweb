@@ -316,18 +316,18 @@ export const Landing: React.FC = () => {
                 </div>
             </div>
 
-            {/* CTA wrapper with single gradient */}
-            <div className="bg-host-gradient animate-gradient-x relative overflow-hidden">
-                {/* Fluid Background Effects (same as Hero) */}
+            {/* CTA — mirrors Hero background structure at a smaller height */}
+            <div className="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-host-gradient animate-gradient-x">
+                {/* Fluid Background Effects — identical to Hero */}
                 <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
                     <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/30 rounded-full mix-blend-overlay filter blur-3xl animate-blob"></div>
                     <div className="absolute top-[20%] right-[-20%] w-[50%] h-[50%] bg-cyan-600/20 rounded-full mix-blend-overlay filter blur-3xl animate-blob animation-delay-2000"></div>
                     <div className="absolute bottom-[-20%] left-[30%] w-[40%] h-[40%] bg-host-blue/40 rounded-full mix-blend-overlay filter blur-3xl animate-blob animation-delay-4000"></div>
                 </div>
 
-                {/* CTA Section */}
-                <div className="py-20 relative">
-                    <div className="container mx-auto px-6 relative z-10">
+                {/* CTA Content */}
+                <div className="py-20 relative z-10 w-full">
+                    <div className="container mx-auto px-6">
                         <div className="scroll-reveal reveal-scale text-center max-w-2xl mx-auto">
                             <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">
                                 {t('landing.cta.title')}

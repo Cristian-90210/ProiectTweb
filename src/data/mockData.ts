@@ -43,7 +43,7 @@ export const mockCoaches: Coach[] = [
         specialization: 'Antrenor Înot',
         experienceYears: 3,
         email: 'roman@atlantisswim.md',
-        avatar: 'https://atlantisswim.md/wp-content/uploads/2025/08/1755805147472445-1152x1536.jpg',
+        avatar: 'https://atlantisswim.md/wp-content/uploads/2025/08/1755608855957162-1536x2048.jpg',
         status: 'Active',
         role: UserRole.Coach,
         imagePosition: 'center'

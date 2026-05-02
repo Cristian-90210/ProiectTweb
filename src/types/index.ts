@@ -2,11 +2,13 @@
  * Standardised role values — must match the backend UserRole enum.
  * 1 = Student (Elev), 2 = Coach (Antrenor), 3 = Admin
  */
-export enum UserRole {
-    Student = 1,
-    Coach   = 2,
-    Admin   = 3,
-}
+export const UserRole = {
+    Student: 1,
+    Coach: 2,
+    Admin: 3,
+} as const;
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole];
 
 /** Human-readable Romanian label for a role. */
 export function getRoleLabel(role: UserRole): string {
@@ -14,6 +16,7 @@ export function getRoleLabel(role: UserRole): string {
         case UserRole.Student: return 'Elev';
         case UserRole.Coach:   return 'Antrenor';
         case UserRole.Admin:   return 'Admin';
+        default: throw new Error(`Unknown role: ${role}`);
     }
 }
 
@@ -26,6 +29,7 @@ export function getRoleKey(role: UserRole): 'student' | 'coach' | 'admin' {
         case UserRole.Student: return 'student';
         case UserRole.Coach:   return 'coach';
         case UserRole.Admin:   return 'admin';
+        default: throw new Error(`Unknown role: ${role}`);
     }
 }
 
@@ -55,7 +59,7 @@ export interface Student {
     level: 'Beginner' | 'Intermediate' | 'Advanced';
     status: 'Active' | 'Inactive';
     enrolledCourseId?: string;
-    role: UserRole.Student;  // discriminator = 1
+    role: typeof UserRole.Student;  // discriminator = 1
     avatar?: string;
 }
 
@@ -75,7 +79,7 @@ export interface Admin {
     id: string;
     name: string;
     email: string;
-    role: UserRole.Admin;  // discriminator = 3
+    role: typeof UserRole.Admin;  // discriminator = 3
     avatar?: string;
     status: 'Active' | 'Inactive';
 }
@@ -99,7 +103,7 @@ export interface Coach {
     email: string;
     avatar?: string;
     status: 'Active' | 'Inactive';
-    role: UserRole.Coach;  // discriminator = 2
+    role: typeof UserRole.Coach;  // discriminator = 2
     imagePosition?: 'top' | 'center' | 'bottom';
 }
 
