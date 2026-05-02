@@ -9,23 +9,12 @@ namespace AtlantisSwim.BusinessLayer.Core
     public class UserActions
     {
         public UserActions() { }
-        internal bool UserLoginDataValidationExecution(UserLoginDto udata)
+        internal UserData? UserLoginDataValidationExecution(UserLoginDto udata)
         {
-            UserData? user;
-            using (var db = new UserContext())
-            {
-                user = db.Users.
-                    FirstOrDefault(x => 
-                        x.UserName == udata.CredentialType && 
-                        x.Password == udata.Password);
-            }
-
-            if (user != null)
-            {
-                return true;
-            }
-
-            return false;
+            using var db = new UserContext();
+            return db.Users.FirstOrDefault(x =>
+                (x.UserName == udata.CredentialType || x.Email == udata.CredentialType) &&
+                x.Password == udata.Password);
         }
         internal string UserTokenGeneration(UserLoginDto udata)
         {

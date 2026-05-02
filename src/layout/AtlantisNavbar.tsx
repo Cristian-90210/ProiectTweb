@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { clsx } from 'clsx';
 
 import { useAuth } from '../context/AuthContext';
+import { UserRole, getRoleLabel } from '../types';
 import { useTheme } from '../context/ThemeContext';
 import { useCart } from '../context/CartContext';
 
@@ -240,7 +241,7 @@ const UserAvatarDropdown: React.FC = () => {
     );
 
     const roleItems =
-        user.role === 'admin' ? adminItems : user.role === 'coach' ? coachItems : studentItems;
+        user.role === UserRole.Admin ? adminItems : user.role === UserRole.Coach ? coachItems : studentItems;
 
     return (
         <Dropdown>
@@ -265,7 +266,7 @@ const UserAvatarDropdown: React.FC = () => {
                     <p className="text-sm font-bold text-gray-800 dark:text-white">{user.name}</p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
                     <span className="mt-1 inline-block text-[10px] font-bold uppercase tracking-widest text-host-cyan bg-host-cyan/10 px-2 py-0.5 rounded-full">
-                        {user.role}
+                        {getRoleLabel(user.role)}
                     </span>
                 </div>
 
@@ -314,7 +315,7 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick }) =
     /* ── Center nav items (role-based) ── */
     const navItems = user
         ? [
-            ...(user.role === 'student'
+            ...(user.role === UserRole.Student
                 ? [
                     { label: t('header.dashboard'), to: '/student' },
                     { label: t('header.courses'), to: '/courses' },
@@ -322,14 +323,14 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick }) =
                     { label: t('header.our_team'), to: '/coaches' },
                 ]
                 : []),
-            ...(user.role === 'coach'
+            ...(user.role === UserRole.Coach
                 ? [
                     { label: t('header.dashboard'), to: '/coach' },
                     { label: t('header.courses'), to: '/courses' },
                     { label: t('header.students'), to: '/students' },
                 ]
                 : []),
-            ...(user.role === 'admin'
+            ...(user.role === UserRole.Admin
                 ? [
                     { label: t('header.dashboard'), to: '/admin' },
                     { label: t('header.courses'), to: '/courses' },
@@ -391,14 +392,14 @@ export const AtlantisNavbar: React.FC<AtlantisNavbarProps> = ({ onMenuClick }) =
 
 
                     {/* Cart / Chat */}
-                    {user?.role === 'coach' ? (
+                    {user?.role === UserRole.Coach ? (
                         <button
                             onClick={() => navigateAndScroll('/coach/chat')}
                             className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-host-cyan transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
                         >
                             <ChatBubbleOvalLeftIcon className="w-5 h-5" />
                         </button>
-                    ) : user?.role === 'student' ? (
+                    ) : user?.role === UserRole.Student ? (
                         <div className="flex items-center space-x-2">
                             <button
                                 onClick={() => navigateAndScroll('/student/chat')}

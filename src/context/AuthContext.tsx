@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { UserRole } from '../types';
 import type { User } from '../types';
 import { mockUserAccounts } from '../data/mockData';
 
@@ -45,7 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 login,
                 logout,
                 isAuthenticated: !!user,
-                isAdmin: user?.role === 'admin',
+                isAdmin: user?.role === UserRole.Admin,
             }}
         >
             {children}

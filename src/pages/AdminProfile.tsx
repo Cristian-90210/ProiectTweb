@@ -7,6 +7,7 @@ import { Shield, Bell, User as UserIcon, Activity, Calendar, Users, BarChart3, C
 import { Button } from '../components/Button';
 import { useTranslation } from 'react-i18next';
 import { mockStudents, mockCoaches, mockBookings } from '../data/mockData';
+import { UserRole, getRoleKey } from '../types';
 import type { StudentNote, Subscription, CoachScheduleSlot, SwimmingResult, AttendanceRecord, SpecialOffer, SwimStyle, SwimDistance } from '../types';
 import { noteService, subscriptionService, scheduleService, resultsService, attendanceService, offerService } from '../services/api';
 import { clsx } from 'clsx';
@@ -14,15 +15,16 @@ import { clsx } from 'clsx';
 export const AdminProfile: React.FC = () => {
     const { user } = useAuth();
     const { t } = useTranslation();
-    const role = user?.role || 'student';
+    const role = user?.role ?? UserRole.Student;
+    const roleKey = getRoleKey(role);
 
     // Role-based tab access
     const roleTabs: Record<string, string[]> = {
-        admin: ['overview', 'notes', 'subscriptions', 'schedule', 'attendance', 'results', 'offers'],
-        coach: ['schedule', 'attendance', 'results', 'messages', 'requests'],
+        admin:   ['overview', 'notes', 'subscriptions', 'schedule', 'attendance', 'results', 'offers'],
+        coach:   ['schedule', 'attendance', 'results', 'messages', 'requests'],
         student: ['subscriptions', 'calendar', 'attendance', 'results', 'recovery'],
     };
-    const allowedTabs = roleTabs[role] || roleTabs.student;
+    const allowedTabs = roleTabs[roleKey] ?? roleTabs.student;
     const [activeTab, setActiveTab] = useState<'overview' | 'notes' | 'subscriptions' | 'schedule' | 'attendance' | 'results' | 'offers' | 'calendar' | 'recovery' | 'messages' | 'requests'>(allowedTabs[0] as any);
 
     // Data states
@@ -66,7 +68,7 @@ export const AdminProfile: React.FC = () => {
         offerService.getAll().then(setOffers);
 
         // Student-specific data
-        if (role === 'student' && user) {
+        if (role === UserRole.Student && user) {
             subscriptionService.getByStudent(user.id).then(sub => setMySubscription(sub || null));
             attendanceService.getByStudent(user.id).then(setStudentAttendance);
             resultsService.getByStudent(user.id).then(setStudentResults);
@@ -161,11 +163,11 @@ export const AdminProfile: React.FC = () => {
     const allTabs = [
         { key: 'overview' as const, label: 'Overview', icon: Activity },
         { key: 'notes' as const, label: 'Note Elevi', icon: FileText },
-        { key: 'subscriptions' as const, label: role === 'student' ? 'Abonamentul Meu' : 'Abonamente', icon: CreditCard },
-        { key: 'schedule' as const, label: role === 'coach' ? 'Programul Meu' : 'Orar Antrenori', icon: Calendar },
+        { key: 'subscriptions' as const, label: role === UserRole.Student ? 'Abonamentul Meu' : 'Abonamente', icon: CreditCard },
+        { key: 'schedule' as const, label: role === UserRole.Coach ? 'Programul Meu' : 'Orar Antrenori', icon: Calendar },
         { key: 'calendar' as const, label: 'Calendar Antrenamente', icon: Calendar },
-        { key: 'attendance' as const, label: role === 'student' ? 'Prezența Mea' : 'Prezență', icon: CheckCircle },
-        { key: 'results' as const, label: role === 'student' ? 'Rezultatele Mele' : 'Rezultate', icon: Trophy },
+        { key: 'attendance' as const, label: role === UserRole.Student ? 'Prezența Mea' : 'Prezență', icon: CheckCircle },
+        { key: 'results' as const, label: role === UserRole.Student ? 'Rezultatele Mele' : 'Rezultate', icon: Trophy },
         { key: 'recovery' as const, label: 'Recuperări', icon: RotateCcw },
         { key: 'offers' as const, label: 'Oferte Speciale', icon: Gift },
         { key: 'messages' as const, label: 'Mesaje', icon: MessageCircle },
@@ -176,14 +178,14 @@ export const AdminProfile: React.FC = () => {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-[#0f172a] pb-24 font-sans text-gray-800 dark:text-gray-200">
             <PageHeader
-                title={<>{role === 'admin' ? 'ADMIN' : role === 'coach' ? 'COACH' : 'STUDENT'} <span className="text-host-cyan">DASHBOARD</span></>}
-                subtitle={role === 'admin' ? 'Comprehensive overview of platform activity and performance.' : role === 'coach' ? 'Training overview and student management.' : 'Your personal overview and progress.'}
+                title={<>{role === UserRole.Admin ? 'ADMIN' : role === UserRole.Coach ? 'COACH' : 'STUDENT'} <span className="text-host-cyan">DASHBOARD</span></>}
+                subtitle={role === UserRole.Admin ? 'Comprehensive overview of platform activity and performance.' : role === UserRole.Coach ? 'Training overview and student management.' : 'Your personal overview and progress.'}
             />
 
             <div className="container mx-auto px-6 max-w-7xl relative mt-8 z-20 space-y-8">
 
                 {/* Info Banner - Admin Only */}
-                {role === 'admin' && (
+                {role === UserRole.Admin && (
                     <div className="bg-cyan-50 dark:bg-cyan-500/5 border border-cyan-200 dark:border-cyan-500/20 px-5 py-4 rounded-2xl flex items-center space-x-4 shadow-sm">
                         <div className="w-10 h-10 rounded-full bg-host-cyan/10 flex items-center justify-center text-host-cyan shrink-0">
                             <Shield className="w-5 h-5" />
@@ -200,7 +202,7 @@ export const AdminProfile: React.FC = () => {
                 )}
 
                 {/* Management Quick Links - Admin Only */}
-                {role === 'admin' && (
+                {role === UserRole.Admin && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <button
                             onClick={() => window.location.href = '/admin/users'}
@@ -264,7 +266,7 @@ export const AdminProfile: React.FC = () => {
                 {/* Overview Tab */}
                 {activeTab === 'overview' && (
                     <div className="space-y-8 animate-in fade-in duration-500">
-                        {role === 'student' ? (
+                        {role === UserRole.Student ? (
                             <>
                                 <div className="rounded-2xl overflow-hidden shadow-2xl relative group">
                                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-transparent to-transparent z-10 pointer-events-none" />
@@ -435,7 +437,7 @@ export const AdminProfile: React.FC = () => {
 
                 {/* Subscriptions Tab */}
                 {activeTab === 'subscriptions' && (
-                    role === 'student' ? (
+                    role === UserRole.Student ? (
                         <div className="space-y-6">
                             {mySubscription ? (() => {
                                 const remaining = mySubscription.sessionsTotal - mySubscription.sessionsUsed;
@@ -548,7 +550,7 @@ export const AdminProfile: React.FC = () => {
                 {/* Schedule & Attendance Tab (Coach View) */}
                 {activeTab === 'schedule' && (
                     <div className="space-y-8 animate-in fade-in duration-500">
-                        {role === 'coach' ? (
+                        {role === UserRole.Coach ? (
                             <>
                                 <div className="flex justify-between items-center mb-6">
                                     <h2 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
@@ -866,7 +868,7 @@ export const AdminProfile: React.FC = () => {
 
                 {/* Attendance Tab */}
                 {activeTab === 'attendance' && (
-                    role === 'student' ? (
+                    role === UserRole.Student ? (
                         <div className="space-y-6">
                             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
                                 <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center space-x-3">
@@ -1008,7 +1010,7 @@ export const AdminProfile: React.FC = () => {
 
                 {/* Results Tab */}
                 {activeTab === 'results' && (
-                    role === 'student' ? (
+                    role === UserRole.Student ? (
                         <div className="space-y-6">
                             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700/60 overflow-hidden">
                                 <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center space-x-3">
@@ -1126,7 +1128,7 @@ export const AdminProfile: React.FC = () => {
                 )}
 
                 {/* Calendar Tab (Student only) */}
-                {activeTab === 'calendar' && role === 'student' && (() => {
+                {activeTab === 'calendar' && role === UserRole.Student && (() => {
                     const today = new Date();
                     const year = calendarMonth.getFullYear();
                     const month = calendarMonth.getMonth();
@@ -1262,7 +1264,7 @@ export const AdminProfile: React.FC = () => {
                 })()}
 
                 {/* Recovery Tab (Student only) */}
-                {activeTab === 'recovery' && role === 'student' && (
+                {activeTab === 'recovery' && role === UserRole.Student && (
                     <div className="space-y-6">
                         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
                             <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6 text-white">

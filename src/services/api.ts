@@ -97,9 +97,10 @@ export const coachService = {
 export const userService = {
     getAll: async (): Promise<AnyUser[]> => {
         await delay(600);
-        const students = mockStudents.map(s => ({ ...s, role: 'student' as const }));
-        const coaches = mockCoaches.map(c => ({ ...c, role: 'coach' as const }));
-        const admins = mockAdmins.map(a => ({ ...a, role: 'admin' as const }));
+        // role is already set to the correct UserRole enum value in mock data
+        const students = mockStudents;
+        const coaches  = mockCoaches;
+        const admins   = mockAdmins;
         return [...students, ...coaches, ...admins];
     },
     updateStatus: async (id: string, status: 'Active' | 'Inactive') => {
