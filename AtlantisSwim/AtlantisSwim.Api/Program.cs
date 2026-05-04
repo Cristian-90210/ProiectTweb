@@ -1,7 +1,10 @@
+using System.Text;
 using AtlantisSwim.BusinessLayer.Interfaces;
 using AtlantisSwim.BusinessLayer.Structure;
 using AtlantisSwim.DataAccess;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,12 +12,39 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found in configuration.");
 
+// Make connection string available to legacy context classes (UserContext, CourseContext, etc.)
+#pragma warning disable CS0618
+DbSession.ConnectionString = connectionString;
+#pragma warning restore CS0618
+
 // ── EF Core — register DbSession via dependency injection ─────────────────────
 builder.Services.AddDbContext<DbSession>(options =>
     options.UseNpgsql(connectionString));
 
 // ── Business layer services ───────────────────────────────────────────────────
 builder.Services.AddScoped<IStudentService, StudentService>();
+
+// ── JWT Authentication ────────────────────────────────────────────────────────
+var jwtKey      = builder.Configuration["Jwt:Key"]      ?? "AtlantisSwim-SuperSecret-JWT-Key-2024!@#$%^&*()";
+var jwtIssuer   = builder.Configuration["Jwt:Issuer"]   ?? "AtlantisSwim.Api";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "AtlantisSwim.Frontend";
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer           = true,
+            ValidateAudience         = true,
+            ValidateLifetime         = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer              = jwtIssuer,
+            ValidAudience            = jwtAudience,
+            IssuerSigningKey         = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
 builder.Services.AddCors(options =>
@@ -41,6 +71,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
