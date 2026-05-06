@@ -62,19 +62,17 @@ export const Login: React.FC = () => {
         }
     }, [isAuthenticated, user, navigate, redirectPath]);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setIsLoading(true);
 
-        setTimeout(() => {
-            const ok = login(email.trim(), password);
-            if (!ok) {
-                setError('Email sau parolă incorectă. Verifică credențialele demo.');
-                setIsLoading(false);
-            }
-            // on success the effect above redirects automatically
-        }, 600);
+        const ok = await login(email.trim(), password);
+        if (!ok) {
+            setError('Email sau parolă incorectă.');
+        }
+        setIsLoading(false);
+        // on success the useEffect above redirects automatically
     };
 
     const fillDemo = (acc: typeof DEMO_ACCOUNTS[0]) => {

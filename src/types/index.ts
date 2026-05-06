@@ -1,14 +1,16 @@
 /**
  * Standardised role values — must match the backend UserRole enum.
  * 1 = Student (Elev), 2 = Coach (Antrenor), 3 = Admin
+ *
+ * Using a const object instead of enum so that esbuild/Vite can strip it
+ * (required by erasableSyntaxOnly in tsconfig.app.json).
  */
 export const UserRole = {
     Student: 1,
-    Coach: 2,
-    Admin: 3,
+    Coach:   2,
+    Admin:   3,
 } as const;
-
-export type UserRole = (typeof UserRole)[keyof typeof UserRole];
+export type UserRole = typeof UserRole[keyof typeof UserRole];
 
 /** Human-readable Romanian label for a role. */
 export function getRoleLabel(role: UserRole): string {
@@ -16,7 +18,6 @@ export function getRoleLabel(role: UserRole): string {
         case UserRole.Student: return 'Elev';
         case UserRole.Coach:   return 'Antrenor';
         case UserRole.Admin:   return 'Admin';
-        default: throw new Error(`Unknown role: ${role}`);
     }
 }
 
@@ -29,7 +30,6 @@ export function getRoleKey(role: UserRole): 'student' | 'coach' | 'admin' {
         case UserRole.Student: return 'student';
         case UserRole.Coach:   return 'coach';
         case UserRole.Admin:   return 'admin';
-        default: throw new Error(`Unknown role: ${role}`);
     }
 }
 
