@@ -6,6 +6,7 @@ using AtlantisSwim.DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,7 +77,28 @@ builder.Services.AddCors(options =>
 builder.Services.AddSignalR();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// ── Swagger + JWT Bearer ──────────────────────────────────────────────────────
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name         = "Authorization",
+        Type         = SecuritySchemeType.Http,
+        Scheme       = "Bearer",
+        BearerFormat = "JWT",
+        In           = ParameterLocation.Header,
+        Description  = "Introduceți token-ul JWT. Exemplu: Bearer {token}"
+    });
+
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecuritySchemeReference("Bearer", document),
+            new List<string>()
+        }
+    });
+});
 
 var app = builder.Build();
 
